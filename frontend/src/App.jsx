@@ -1,56 +1,48 @@
+import React, { useState } from 'react';
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import StatusSection from './components/StatusSection';
+import StationsSection from './components/StationsSection';
+import Footer from './components/Footer';
+import BookingModal from './components/BookingModal';
+
 function App() {
+  const [selectedStation, setSelectedStation] = useState(null);
+
+  const handleScrollToStations = () => {
+    const element = document.getElementById('stations');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="app">
-      <header className="navbar">
-        <h2>⚡ EVolve</h2>
+    <div className="app-layout">
+      {/* 1. Navigation Bar */}
+      <Navbar onFindChargerClick={handleScrollToStations} />
 
-        <nav>
-          <a href="#">Stations</a>
-          <a href="#">Bookings</a>
-          <a href="#">Login</a>
-        </nav>
-      </header>
-
+      {/* 2. Main Content Area */}
       <main>
-        <section className="hero">
-          <div>
-            <p className="tagline">SMART EV CHARGING</p>
+        {/* Hero Section */}
+        <Hero onExploreClick={handleScrollToStations} />
 
-            <h1>Charge smarter.<br />Travel further.</h1>
+        {/* Live Network Status Section & CSS Visualization */}
+        <StatusSection />
 
-            <p className="description">
-              Find available EV chargers, book your slot,
-              and manage your charging journey from one place.
-            </p>
-
-            <button>Find Charging Stations</button>
-          </div>
-        </section>
-
-        <section className="status">
-          <h2>Live Charging Status</h2>
-
-          <div className="status-grid">
-            <div className="status-card">
-              <h3>Available Chargers</h3>
-              <strong>18</strong>
-              <p>Ready to use</p>
-            </div>
-
-            <div className="status-card">
-              <h3>Currently Charging</h3>
-              <strong>7</strong>
-              <p>In active sessions</p>
-            </div>
-
-            <div className="status-card">
-              <h3>Total Stations</h3>
-              <strong>12</strong>
-              <p>Connected stations</p>
-            </div>
-          </div>
-        </section>
+        {/* Nearby Charging Stations & Interactive Search/Filter */}
+        <StationsSection onBookClick={(station) => setSelectedStation(station)} />
       </main>
+
+      {/* 3. Footer */}
+      <Footer />
+
+      {/* 4. Slot Booking Modal Dialog */}
+      {selectedStation && (
+        <BookingModal
+          station={selectedStation}
+          onClose={() => setSelectedStation(null)}
+        />
+      )}
     </div>
   );
 }
