@@ -1,7 +1,7 @@
 function App() {
   return (
-    <div>
-      <header>
+    <div className="app">
+      <header className="navbar">
         <h2>⚡ EVolve</h2>
 
         <nav>
@@ -12,33 +12,42 @@ function App() {
       </header>
 
       <main>
-        <section>
-          <h1>Smart EV Charging</h1>
+        <section className="hero">
+          <div>
+            <p className="tagline">SMART EV CHARGING</p>
 
-          <p>
-            Find a charging station, check charger availability,
-            and manage your charging sessions in one place.
-          </p>
+            <h1>Charge smarter.<br />Travel further.</h1>
 
-          <button>Find Charging Stations</button>
+            <p className="description">
+              Find available EV chargers, book your slot,
+              and manage your charging journey from one place.
+            </p>
+
+            <button>Find Charging Stations</button>
+          </div>
         </section>
 
-        <section>
+        <section className="status">
           <h2>Live Charging Status</h2>
 
-          <div>
-            <h3>Available Chargers</h3>
-            <p>18</p>
-          </div>
+          <div className="status-grid">
+            <div className="status-card">
+              <h3>Available Chargers</h3>
+              <strong>18</strong>
+              <p>Ready to use</p>
+            </div>
 
-          <div>
-            <h3>Currently Charging</h3>
-            <p>7</p>
-          </div>
+            <div className="status-card">
+              <h3>Currently Charging</h3>
+              <strong>7</strong>
+              <p>In active sessions</p>
+            </div>
 
-          <div>
-            <h3>Total Stations</h3>
-            <p>12</p>
+            <div className="status-card">
+              <h3>Total Stations</h3>
+              <strong>12</strong>
+              <p>Connected stations</p>
+            </div>
           </div>
         </section>
       </main>
