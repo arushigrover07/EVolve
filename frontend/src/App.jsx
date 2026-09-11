@@ -8,6 +8,7 @@ import BookingModal from './components/BookingModal';
 
 function App() {
   const [selectedStation, setSelectedStation] = useState(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const handleScrollToStations = () => {
     const element = document.getElementById('stations');
@@ -30,7 +31,7 @@ function App() {
         <StatusSection />
 
         {/* Nearby Charging Stations & Interactive Search/Filter */}
-        <StationsSection onBookClick={(station) => setSelectedStation(station)} />
+        <StationsSection key={refreshKey} onBookClick={(station) => setSelectedStation(station)} />
       </main>
 
       {/* 3. Footer */}
@@ -41,6 +42,9 @@ function App() {
         <BookingModal
           station={selectedStation}
           onClose={() => setSelectedStation(null)}
+          onBookingSuccess={() => {
+            setRefreshKey((prev) => prev + 1);
+          }}
         />
       )}
     </div>
