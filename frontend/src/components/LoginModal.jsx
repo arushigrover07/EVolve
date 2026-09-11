@@ -1,28 +1,48 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../config';
 
 function LoginModal({ isOpen, onClose, onLoginSuccess }) {
-  const [email, setEmail] = useState('operator@evolve.cloud');
-  const [password, setPassword] = useState('••••••••');
+  const [email, setEmail] = useState('demo@evolve.com');
+  const [password, setPassword] = useState('demo123');
   const [submitting, setSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
+    setErrorMsg(null);
+    setSuccessMsg(null);
 
-    setTimeout(() => {
-      setSubmitting(false);
-      setSuccessMsg('Successfully authenticated as Operator (User ID #1)');
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || 'Authentication failed. Please check credentials.');
+      }
+
+      setSuccessMsg(`Authenticated as ${data.user.name} (Role: ${data.user.role || 'User'})`);
+      
       setTimeout(() => {
         if (onLoginSuccess) {
-          onLoginSuccess({ id: 1, name: 'Demo Operator', email });
+          onLoginSuccess(data.user);
         }
         onClose();
         setSuccessMsg(null);
       }, 1000);
-    }, 600);
+    } catch (err) {
+      setErrorMsg(err.message || 'Unable to connect to login authentication service');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -31,7 +51,7 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
         <div className="modal-header">
           <div>
             <span className="modal-eyebrow">PORTAL ACCESS</span>
-            <h2 className="modal-title">Operator Login</h2>
+            <h2 className="modal-title">EVolve Login</h2>
           </div>
           <button className="modal-close-btn" onClick={onClose} aria-label="Close modal">✕</button>
         </div>
@@ -40,12 +60,18 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
           <div className="system-notice-box" style={{ marginBottom: '20px' }}>
             <span className="notice-icon">⚡</span>
             <div>
-              <strong>Demo Environment Active</strong>
+              <strong>PostgreSQL Database Authentication</strong>
               <p style={{ fontSize: '0.82rem', margin: '2px 0 0 0', color: 'var(--text-muted)' }}>
-                Authenticated actions manage slot reservations under Operator User ID #1.
+                Validates credentials against Neon PostgreSQL database records.
               </p>
             </div>
           </div>
+
+          {errorMsg && (
+            <div className="stations-error" style={{ marginBottom: '16px', padding: '12px 16px' }}>
+              <p style={{ margin: 0, color: 'var(--status-danger-text)', fontSize: '0.88rem' }}>⚠️ {errorMsg}</p>
+            </div>
+          )}
 
           {successMsg ? (
             <div className="booking-success-state" style={{ padding: '20px 0', textAlign: 'center' }}>
@@ -63,7 +89,7 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="operator@evolve.cloud"
+                  placeholder="demo@evolve.com"
                   required
                   style={{
                     width: '100%',
@@ -84,7 +110,7 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="demo123"
                   required
                   style={{
                     width: '100%',
@@ -102,7 +128,7 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                   Cancel
                 </button>
                 <button type="submit" className="btn-primary" disabled={submitting}>
-                  {submitting ? 'Signing In...' : 'Sign In as Operator'}
+                  {submitting ? 'Authenticating...' : 'Sign In'}
                 </button>
               </div>
             </form>

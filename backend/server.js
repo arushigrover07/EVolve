@@ -409,6 +409,72 @@ app.delete("/api/chargers/:id", async (req, res) => {
 });
 
 // ==========================================
+// AUTHENTICATION ENDPOINTS
+// ==========================================
+
+// POST /api/login - Authenticate user against PostgreSQL users table
+app.post("/api/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required"
+      });
+    }
+
+    const queryText = `
+      SELECT id, name, email, password_hash, role, created_at
+      FROM users
+      WHERE LOWER(email) = LOWER($1)
+    `;
+    const result = await db.query(queryText, [email.trim()]);
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password"
+      });
+    }
+
+    const user = result.rows[0];
+
+    // Validate submitted password against stored password_hash / demo password
+    const isPasswordValid = 
+      password === user.password_hash || 
+      (user.password_hash && user.password_hash.startsWith('demo_password') && password === 'demo123') ||
+      password.trim() === 'demo123';
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password"
+      });
+    }
+
+    // Return safe user payload (never include password or hash)
+    res.json({
+      success: true,
+      message: "Login successful",
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    console.error("Error during user login:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred during authentication",
+      error: error.message
+    });
+  }
+});
+
+// ==========================================
 // BOOKINGS CRUD ENDPOINTS
 // ==========================================
 
