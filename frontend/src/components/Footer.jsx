@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Footer() {
+function Footer({ onLoginClick }) {
   return (
     <footer className="footer-container">
       <div className="section-container">
@@ -28,7 +28,7 @@ function Footer() {
               <li><a href="#stations">Find Charging Stations</a></li>
               <li><a href="#network">Live Network Status</a></li>
               <li><a href="#bookings">My Bookings</a></li>
-              <li><a href="#login">Operator Login</a></li>
+              <li><a href="#login" onClick={(e) => { e.preventDefault(); if (onLoginClick) onLoginClick(); }}>Operator Login</a></li>
             </ul>
           </div>
 
