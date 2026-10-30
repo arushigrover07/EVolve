@@ -1,0 +1,23 @@
+[
+  {
+    "identityStatus": 200,
+    "instanceId": "84340d27-c6eb-41b6-9b92-6f9e52e32916",
+    "stationStatus": 500,
+    "stationBodySha256": "43cddfd8a458e4478c3aeca7b7cce307b9690508331a57202b0d50a76062c092",
+    "service": "backend1"
+  },
+  {
+    "identityStatus": 200,
+    "instanceId": "c3ed4594-8a4e-4b71-9a8b-167b0a096489",
+    "stationStatus": 500,
+    "stationBodySha256": "43cddfd8a458e4478c3aeca7b7cce307b9690508331a57202b0d50a76062c092",
+    "service": "backend2"
+  },
+  {
+    "identityStatus": 200,
+    "instanceId": "8bb2c825-4a13-4492-b391-5f44329d8f9f",
+    "stationStatus": 500,
+    "stationBodySha256": "43cddfd8a458e4478c3aeca7b7cce307b9690508331a57202b0d50a76062c092",
+    "service": "backend3"
+  }
+]

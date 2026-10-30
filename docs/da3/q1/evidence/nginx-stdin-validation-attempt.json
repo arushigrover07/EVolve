@@ -1,0 +1,11 @@
+{
+  "configuration": "nginx.one.conf",
+  "command": "docker exec -i <verified frontend ID> nginx -t -c /dev/stdin",
+  "exitCode": 1,
+  "output": [
+    "nginx: the configuration file /dev/stdin syntax is ok",
+    "2026/10/30 15:36:02 [emerg] 35#35: no \"events\" section in configuration",
+    "nginx: [emerg] no \"events\" section in configuration",
+    "nginx: configuration file /dev/stdin test failed"
+  ]
+}

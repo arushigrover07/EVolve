@@ -1,0 +1,2 @@
+9b3d965fc336b239c9758a7100932d3bbaa8bd55f73c5dd5050fe893887753ab
+Verified dedicated baseline proxy removed. Other containers, networks, volumes and images were preserved.

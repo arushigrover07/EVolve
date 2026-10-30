@@ -1,0 +1,24 @@
+{
+  "requests": 12,
+  "successes": 12,
+  "distinctBackendInstances": 3,
+  "counts": [
+    {
+      "backendInstanceId": "3c0b17ff-ce36-4913-b8f0-7745d719ef9e",
+      "Count": 9
+    },
+    {
+      "backendInstanceId": "4493ff05-b883-4e8c-ab59-92f88fa76d34",
+      "Count": 1
+    },
+    {
+      "backendInstanceId": "9a322382-4329-4e5d-9340-5e4d7d6b9112",
+      "Count": 2
+    }
+  ],
+  "endpoint": "/api/stations",
+  "observedDataHashes": [
+    "8dc1a4fd5ba2bcef7bfac5bac7c6e8979952d555fdea0ff14c2c8e3e15873dc2"
+  ],
+  "note": "Database-backed read evidence; hashes only, no response bodies saved."
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "name": "backend-tests",
+    "command": "cd backend; npm test",
+    "exitCode": 0,
+    "passed": true,
+    "startedUtc": "2026-10-30T16:54:26.0246707+00:00",
+    "finishedUtc": "2026-10-30T16:54:31.0045031+00:00",
+    "log": "backend-tests.txt"
+  },
+  {
+    "name": "frontend-routing-tests",
+    "command": "node --test backend/test/frontend-config.test.js",
+    "exitCode": 0,
+    "passed": true,
+    "startedUtc": "2026-10-30T16:54:31.0232423+00:00",
+    "finishedUtc": "2026-10-30T16:54:31.2382501+00:00",
+    "log": "frontend-routing-tests.txt"
+  },
+  {
+    "name": "benchmark-tests",
+    "command": "node --test benchmarks/prepare.test.cjs benchmarks/failure.test.cjs",
+    "exitCode": 0,
+    "passed": true,
+    "startedUtc": "2026-10-30T16:54:31.2393295+00:00",
+    "finishedUtc": "2026-10-30T16:54:31.5141289+00:00",
+    "log": "benchmark-tests.txt"
+  },
+  {
+    "name": "recovery-tests",
+    "command": "./benchmarks/preflight.tests.ps1",
+    "exitCode": 0,
+    "passed": true,
+    "startedUtc": "2026-10-30T16:54:31.5161036+00:00",
+    "finishedUtc": "2026-10-30T16:54:32.4975507+00:00",
+    "log": "recovery-tests.txt"
+  },
+  {
+    "name": "frontend-build",
+    "command": "VITE_API_URL=/ npm run build (frontend)",
+    "exitCode": 0,
+    "passed": true,
+    "startedUtc": "2026-10-30T16:54:32.4992691+00:00",
+    "finishedUtc": "2026-10-30T16:54:34.4557721+00:00",
+    "log": "frontend-build.txt"
+  },
+  {
+    "name": "frontend-lint",
+    "command": "frontend eslint; sanitized diagnostics only",
+    "exitCode": 1,
+    "passed": false,
+    "startedUtc": "2026-10-30T16:54:34.4598924+00:00",
+    "finishedUtc": "2026-10-30T16:54:42.3792425+00:00",
+    "log": "frontend-lint.txt"
+  },
+  {
+    "name": "javascript-syntax",
+    "command": "node --check backend and benchmark JS/MJS/CJS; frontend config",
+    "exitCode": 0,
+    "passed": true,
+    "startedUtc": "2026-10-30T16:54:42.3799480+00:00",
+    "finishedUtc": "2026-10-30T16:54:45.4007000+00:00",
+    "log": "javascript-syntax.txt"
+  },
+  {
+    "name": "powershell-syntax",
+    "command": "Parser.ParseFile on all scripts and preflight tests",
+    "exitCode": 0,
+    "passed": true,
+    "startedUtc": "2026-10-30T16:54:45.4027110+00:00",
+    "finishedUtc": "2026-10-30T16:54:45.4464903+00:00",
+    "log": "powershell-syntax.txt"
+  },
+  {
+    "name": "compose-q1a",
+    "command": "./scripts/validate-compose.ps1",
+    "exitCode": 0,
+    "passed": true,
+    "startedUtc": "2026-10-30T16:54:45.4487345+00:00",
+    "finishedUtc": "2026-10-30T16:54:46.1003663+00:00",
+    "log": "compose-q1a.txt"
+  },
+  {
+    "name": "compose-q1b",
+    "command": "./scripts/validate-q1b.ps1",
+    "exitCode": 0,
+    "passed": true,
+    "startedUtc": "2026-10-30T16:54:46.1012902+00:00",
+    "finishedUtc": "2026-10-30T16:54:49.1350996+00:00",
+    "log": "compose-q1b.txt"
+  },
+  {
+    "name": "compose-q1c",
+    "command": "docker compose config with no service env resolution; before and after overlays",
+    "exitCode": 0,
+    "passed": true,
+    "startedUtc": "2026-10-30T16:54:49.1399696+00:00",
+    "finishedUtc": "2026-10-30T16:54:50.7651539+00:00",
+    "log": "compose-q1c.txt"
+  },
+  {
+    "name": "whitespace",
+    "command": "git -c core.fsmonitor=false diff --check",
+    "exitCode": 0,
+    "passed": true,
+    "startedUtc": "2026-10-30T16:54:50.7672568+00:00",
+    "finishedUtc": "2026-10-30T16:54:50.8994691+00:00",
+    "log": "whitespace.txt"
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "timestampUtc": "2026-10-30T16:22:15.594887+00:00",
+    "httpStatus": 200,
+    "elapsedMs": 4323,
+    "outcome": "success_valid_station_array"
+  },
+  {
+    "timestampUtc": "2026-10-30T16:22:31.816937+00:00",
+    "httpStatus": 200,
+    "elapsedMs": 3731,
+    "outcome": "success_valid_station_array"
+  },
+  {
+    "timestampUtc": "2026-10-30T16:22:45.593297+00:00",
+    "httpStatus": 200,
+    "elapsedMs": 3644,
+    "outcome": "success_valid_station_array"
+  },
+  {
+    "timestampUtc": "2026-10-30T16:23:00.575701+00:00",
+    "httpStatus": 200,
+    "elapsedMs": 4331,
+    "outcome": "success_valid_station_array"
+  },
+  {
+    "timestampUtc": "2026-10-30T16:23:15.585732+00:00",
+    "httpStatus": 200,
+    "elapsedMs": 3585,
+    "outcome": "success_valid_station_array"
+  },
+  {
+    "timestampUtc": "2026-10-30T16:23:30.580656+00:00",
+    "httpStatus": 200,
+    "elapsedMs": 4340,
+    "outcome": "success_valid_station_array"
+  },
+  {
+    "timestampUtc": "2026-10-30T16:23:45.591178+00:00",
+    "httpStatus": 200,
+    "elapsedMs": 3562,
+    "outcome": "success_valid_station_array"
+  },
+  {
+    "timestampUtc": "2026-10-30T16:24:00.587272+00:00",
+    "httpStatus": 200,
+    "elapsedMs": 1486,
+    "outcome": "success_valid_station_array"
+  },
+  {
+    "timestampUtc": "2026-10-30T16:24:15.579936+00:00",
+    "httpStatus": 200,
+    "elapsedMs": 3636,
+    "outcome": "success_valid_station_array"
+  }
+]

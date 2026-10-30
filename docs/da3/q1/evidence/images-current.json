@@ -1,0 +1,97 @@
+[
+  {
+    "id": "sha256:001dd85f939c6b53bc24fb1a153807ff79f9181712b76b1b36c04240cddc08d3",
+    "created": "2026-10-30T13:13:43.836715637Z",
+    "layers": [
+      "sha256:29df493baa13de438d6d2ece3a8333032e0b7b9b9d8cce4ee82194da255f61e1",
+      "sha256:4983b93ee7967564f02cbf6162b75010ce557404a539fba05ee19a0eae01acbc",
+      "sha256:e10358715ead9b47009dd04bcd77ac1c8e247f7249ab06517ff913c473a8e38e",
+      "sha256:afa543f85b4685a84338df3e2c429edca49bb372b0f49e0c5cc9724c820ad094",
+      "sha256:536f7078e3f9b2f89177b5f00b0264086f9f61a6447040d218e9e18154532b19",
+      "sha256:641df0066d03bf9e1dec42b86a9149e9a2a3c0d933fb38f0a5fe6d490b470e29",
+      "sha256:0cf6914cf2982a2afee4e15842fde7eb2424e02b15b5f962fca7e363fc55502f",
+      "sha256:40e8950f0e1329cd143623e7a5300bf760c610d3ace46d65284373f2d5701a3d"
+    ],
+    "command": [
+      "node",
+      "server.js"
+    ],
+    "entrypoint": [
+      "docker-entrypoint.sh"
+    ],
+    "composeService": "backend3",
+    "sourceRevision": null
+  },
+  {
+    "id": "sha256:046f9aac7098d53939f4ce1f50a0c59e69100c7c0bf88938107112aa29bef8d0",
+    "created": "2026-10-30T13:13:37.288588768Z",
+    "layers": [
+      "sha256:75c137aedfb2760f88629236cb7b797630aed0c3d91d626d1d1bb694878fc2ba",
+      "sha256:347d70688a4f620ee434007bc3b622592c459d0c45cbc275d0c8c3db0d2cb3e5",
+      "sha256:0118eeeab20f23cb5712fe7b96dd0a3460b185c3f9fb0bdb59062a3972f5b9af",
+      "sha256:a027351c56d0ec60ff555693e0afdd9ac6536425c3a6cd70cfd99438c32cf33b",
+      "sha256:54733ab91a37b26f9dbcdebb53c37d88e967e1aca9e52984d231c7418c858dba",
+      "sha256:26fc657c345556a2c48a5cdaa66f5e31ea881a18184bc943ad42cc46e93d7139",
+      "sha256:6e2ae602f9d69418f36fd9c178e472fb6e6b468f6aadd3dbd759fcee552a7527",
+      "sha256:a617e334a194398d200a112e5d4a39c65aa720650fe0fae732bdb1d7d4fb53a0",
+      "sha256:87c6b60600f841817bbfff9bf2785b14a6776053ee142f9cc095c2c527304799",
+      "sha256:462947c9cf5196b6957ab539d2e55f38272de37a6116029299857a10a14daf97"
+    ],
+    "command": [
+      "nginx",
+      "-g",
+      "daemon off;"
+    ],
+    "entrypoint": [
+      "/docker-entrypoint.sh"
+    ],
+    "composeService": "frontend",
+    "sourceRevision": null
+  },
+  {
+    "id": "sha256:0fd2b2d4ca403d6756563e75a1bb995f7972420bb6694e6d59062fa8b0356d96",
+    "created": "2026-10-30T13:13:43.836715637Z",
+    "layers": [
+      "sha256:29df493baa13de438d6d2ece3a8333032e0b7b9b9d8cce4ee82194da255f61e1",
+      "sha256:4983b93ee7967564f02cbf6162b75010ce557404a539fba05ee19a0eae01acbc",
+      "sha256:e10358715ead9b47009dd04bcd77ac1c8e247f7249ab06517ff913c473a8e38e",
+      "sha256:afa543f85b4685a84338df3e2c429edca49bb372b0f49e0c5cc9724c820ad094",
+      "sha256:536f7078e3f9b2f89177b5f00b0264086f9f61a6447040d218e9e18154532b19",
+      "sha256:641df0066d03bf9e1dec42b86a9149e9a2a3c0d933fb38f0a5fe6d490b470e29",
+      "sha256:0cf6914cf2982a2afee4e15842fde7eb2424e02b15b5f962fca7e363fc55502f",
+      "sha256:40e8950f0e1329cd143623e7a5300bf760c610d3ace46d65284373f2d5701a3d"
+    ],
+    "command": [
+      "node",
+      "server.js"
+    ],
+    "entrypoint": [
+      "docker-entrypoint.sh"
+    ],
+    "composeService": "backend1",
+    "sourceRevision": null
+  },
+  {
+    "id": "sha256:e49ce4df0a98f28653a78ca65546ce9be8481029915a74397c42b592a2c05861",
+    "created": "2026-10-30T13:13:43.836715637Z",
+    "layers": [
+      "sha256:29df493baa13de438d6d2ece3a8333032e0b7b9b9d8cce4ee82194da255f61e1",
+      "sha256:4983b93ee7967564f02cbf6162b75010ce557404a539fba05ee19a0eae01acbc",
+      "sha256:e10358715ead9b47009dd04bcd77ac1c8e247f7249ab06517ff913c473a8e38e",
+      "sha256:afa543f85b4685a84338df3e2c429edca49bb372b0f49e0c5cc9724c820ad094",
+      "sha256:536f7078e3f9b2f89177b5f00b0264086f9f61a6447040d218e9e18154532b19",
+      "sha256:641df0066d03bf9e1dec42b86a9149e9a2a3c0d933fb38f0a5fe6d490b470e29",
+      "sha256:0cf6914cf2982a2afee4e15842fde7eb2424e02b15b5f962fca7e363fc55502f",
+      "sha256:40e8950f0e1329cd143623e7a5300bf760c610d3ace46d65284373f2d5701a3d"
+    ],
+    "command": [
+      "node",
+      "server.js"
+    ],
+    "entrypoint": [
+      "docker-entrypoint.sh"
+    ],
+    "composeService": "backend2",
+    "sourceRevision": null
+  }
+]

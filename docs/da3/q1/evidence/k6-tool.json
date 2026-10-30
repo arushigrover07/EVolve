@@ -1,0 +1,7 @@
+{
+  "version": "k6.exe v1.8.2 (commit/682f083071, go1.26.9, windows/amd64)",
+  "archiveSha256": "C763B4796147BF796F3B7890B84A87A5042A010905DB75097AF1E61857FDD0C2",
+  "binarySha256": "CA7A68ED62103986CF7BED8C15E25DC0CC90F8F08F4C05CDDAFB29F2DF53CA6E",
+  "source": "https://github.com/grafana/k6/releases/tag/v1.8.2",
+  "installation": "portable workspace-local; no system installation"
+}

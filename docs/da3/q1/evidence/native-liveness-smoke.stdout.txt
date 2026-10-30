@@ -1,0 +1,19 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: .local-tools/native-liveness-smoke.mjs
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 20 max VUs, 30m25s max duration (incl. graceful stop):
+              * comparison: 20 iterations shared among 20 VUs (maxDuration: 30m0s, gracefulStop: 25s)
+
+Raw benchmark summary saved; wrapper acceptance is pending.
+
+running (00m00.1s), 00/20 VUs, 20 complete and 0 interrupted iterations
+comparison ✓ [ 100% ] 20 VUs  00m00.1s/30m0s  20/20 shared iters

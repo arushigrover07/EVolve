@@ -1,0 +1,273 @@
+# EVolve: Digital Assignment 3 - Question 1
+
+BACSE344 Cloud Infrastructure and Architecture | Branch `da3` | 30 October 2026 (IST)
+
+## Outcome and evidence boundary
+
+Question 1 totals **5 marks**: (a) 1, (b) 1.5, (c) 1.5, (d) 1. The original
+`DA3 Question.pdf` was read; its exact Q1 text and source SHA256 are preserved in
+[evidence/assignment-q1.txt](evidence/assignment-q1.txt) and
+[evidence/assignment-source.json](evidence/assignment-source.json).
+
+This is an evidence-backed implementation/report pack, **not a claim that all Q1
+runtime requirements are complete**. The local proxy distributed 30 successful
+identity requests across three actual APIs. However, the chosen database-backed
+API returned HTTP 500 on the initial probe and three subsequent probes. A sanitized
+read-only `SELECT 1` diagnostic identified the configured provider as Neon, resolved
+DNS, and failed with **ETIMEDOUT**. An IPv4-first diagnostic also failed. No host,
+connection string, IP address, credential or raw database error message was saved.
+
+Therefore neither 1000-request performance run nor either backend-stop experiment
+was executed. Image alignment/recreation was not attempted after readiness failed.
+The existing stack was preserved. No benchmark or zero-failure figures are invented.
+[Machine-readable status](benchmarks/status.json) and the
+[requirement matrix](q1-verification-matrix.md) identify every incomplete requirement.
+
+## Q1(a): EV charging peak and scaled architecture - 1 mark
+
+### Domain scenario and busiest API
+
+A holiday departure rush near a campus and adjoining highway can cause many EV
+drivers to search for stations and available chargers at the same time. EVolve's
+actual station-list UI fetches **GET /api/stations**. In `backend/app.js`, that route
+joins stations to chargers and aggregates total, available and charging counts,
+ordered by station ID. It is a realistic shared read path during this rush.
+It performs a SELECT; it does not create bookings, start/complete charging sessions
+or write telemetry. The intended benchmark uses no POST, PUT or DELETE API.
+
+### Actual local setup
+
+`frontend` serves the React build and runs the single Nginx load balancer on
+container port 80, published at host **5173**. `backend1`, `backend2`, `backend3`
+listen on internal **5000**, with no published API host ports. They share the
+`evolve_default` Docker network. The actual Nginx upstream includes all three
+service DNS names. The default policy is round-robin; observed counts need not be
+perfectly equal. `/api/` retains paths/query strings/methods/bodies; `/health` is
+process liveness and does not prove database readiness.
+
+Compose's explicit `VITE_API_URL=/` maps to same-origin `/api/...` requests. Outside
+Compose, the existing explicit API setting and empty/unset local/Render fallbacks
+are retained. This local scaling experiment is **not deployed on Render**.
+
+Each API pool is capped at 5 connections: **15 maximum across three replicas**,
+excluding existing hosting/admin clients. Pools are lazy. No telemetry worker is
+running locally; API startup never starts one. The optional worker would add up
+to 5 connections but was not enabled. Startup schema alteration was previously
+extracted into an explicit migration; no migration was executed here.
+
+The three APIs currently have identical filesystem layers and different image IDs
+because image metadata includes per-service labels. A single-ID alignment override
+and exact rollback snapshot are prepared and model-validated, but were not applied
+because the station API is not ready. Source Git revision is not attested by OCI
+labels; uncommitted working-tree changes are not described as a deployed commit.
+
+### Genuine distribution evidence
+
+`./scripts/collect-q1a.ps1` sent **30 GET /api/instance requests through host 5173**.
+All returned HTTP 200 with matching response body/header instance IDs. It performs
+no database queries. The observed distribution was:
+
+| Backend instance identifier | Requests observed |
+|---|---:|
+| `84340d27-c6eb-41b6-9b92-6f9e52e32916` | 12 |
+| `8bb2c825-4a13-4492-b391-5f44329d8f9f` | 8 |
+| `c3ed4594-8a4e-4b71-9a8b-167b0a096489` | 10 |
+
+The complete request/status/ID/success table is in
+[evidence/q1a-distribution.csv](evidence/q1a-distribution.csv), reproduced in the
+appendix below. IDs are opaque per-process UUIDs, stable until process restart.
+The per-service identity mapping is saved in [evidence/instance-service-map.json](evidence/instance-service-map.json).
+This proves proxy distribution, **not equivalent successful station data**: the
+station-data check is blocked by the database connection timeout.
+
+Container identity/ownership/network/port snapshots, sanitized Compose output,
+source-mounted Nginx configuration and actual native syntax validation are under
+[evidence/](evidence/). Before and after container IDs match; no application
+container was stopped, removed or recreated.
+
+## Q1(b): One backend versus three - 1.5 marks
+
+### Controlled protocol
+
+Use the existing k6 tooling, now verified with native **k6.exe v1.8.2 (commit/682f083071, go1.26.9, windows/amd64)**.
+The official Windows archive checksum matched its published checksum; the portable
+binary is under ignored `.local-tools/`, without system installation.
+Native `k6 inspect` initialized both workloads. A separate **20-request /health
+functional smoke** completed without failures and confirmed resolved workload
+gauges. It is not a station benchmark and its RPS/latency is not used here.
+
+The intended paired runs use exactly 1000 measured client requests, 20 VUs,
+GET /api/stations, 20-second timeout, identical headers/tool/binary/settings,
+no redirects, no scripted retries and zero warm-up requests. One uses an isolated
+proxy at 127.0.0.1:5174 forwarding to existing backend1; Three uses 127.0.0.1:5173.
+Both include equivalent Nginx settings, with retries disabled. No extra backend,
+pool or worker is created for the baseline. It uses a separate project and an
+approved immutable frontend image; cleanup targets only its verified full ID.
+
+Unmeasured read-only response snapshots bracket each measured run. Hashes must
+match within and across runs. These detect observed data changes, not all possible
+transient changes. Snapshot requests are excluded from the 1000 measured requests.
+The runner records raw summary, separate process metadata/exit code, actual
+resolved gauges, artifact hashes, tool/image identities and explicit acceptance.
+The comparator independently verifies fields, raw counts, named HTTP-200 checks,
+thresholds and file contents. Failed, incomplete or incompatible runs are rejected.
+
+### Actual results
+
+**NOT RUN: station API readiness failed.** Running a load of known HTTP 500 responses
+would not establish application scaling. The existing stack was not reconfigured.
+
+| Metric | One backend | Three backends |
+|---|---:|---:|
+| Client requests | Not run | Not run |
+| Successful requests | Not run | Not run |
+| Failed requests | Not run | Not run |
+| Concurrency | 20 planned; not measured | 20 planned; not measured |
+| Requests per second | Not measured | Not measured |
+| Average response time | Not measured | Not measured |
+
+RPS improvement = ((three RPS - one RPS) / one RPS) x 100: **not calculated**.
+Mean-time reduction = ((one mean - three mean) / one mean) x 100: **not calculated**.
+There is no claim that scaling improves performance. Shared Neon latency/compute,
+pool queueing, connection warmness, caches, run order, host contention and other
+clients could reduce or reverse improvement. Pool capacity also changes from 5 to
+15, so any future effect is not purely increased application CPU capacity.
+
+Client HTTP counts, backend attempts and SQL statements are distinct. Backend and
+SQL counts are unmeasured; 1000 client requests do not prove 1000 SQL executions.
+
+## Q1(c): Failure handling - 1.5 marks
+
+### Implemented experiment and retry policy
+
+The isolated before config is `benchmarks/nginx.failover-before.conf`, matching
+no-retry three-instance benchmarking. The after config adds a shared upstream zone,
+`max_fails=1 fail_timeout=30s`, connect timeout 1s, and bounded retries on the exact
+read endpoint: error/timeout/502/503/504, at most three upstream attempts and a
+5-second retry window. Non-idempotent retries are not enabled. That temporary
+benchmark location admits GET/HEAD only; ordinary application Nginx is unchanged.
+Read/send timeouts remain inactivity timeouts, not a guarantee of zero failures.
+
+The same k6 failure workload uses 1000 requests, 20 VUs, 20-second request timeout
+and 0.5s pacing per iteration in both phases, ensuring a sufficiently long run.
+The controller waits at least 8 seconds from the first request and for observed
+in-flight activity, validates the exact owned backend3 ID/image, then requests a
+15-second graceful stop. It refuses unrelated load tools or unexpected traffic.
+It logs request starts/ends, stop requested/completed timestamps and restoration.
+It restores only the same verified backend ID and waits for liveness. Validation
+requires complete matching logs/raw metrics, a stop overlapping real requests,
+identical workload metadata, stable observed data and successful recovery.
+
+Failure categories are disjoint: timeouts; other transport failures; HTTP non-2xx.
+Total failed clients = their sum. Retrying a GET may repeat backend/database work,
+so client success alone is not proof of one upstream execution. Retries are bounded
+and isolated to avoid silently changing ordinary application behavior.
+
+### Actual before/after counts
+
+**NOT RUN.** No backend was stopped: the intended API's HTTP 500/ETIMEDOUT state
+blocks a meaningful failover experiment. Native Nginx syntax checks and offline
+classification/validation tests passed, but they do not demonstrate runtime failover.
+
+| Metric | Before configuration | After configuration |
+|---|---:|---:|
+| Client requests | Not run | Not run |
+| Failed requests | Not measured | Not measured |
+| Transport errors | Not measured | Not measured |
+| Timeouts | Not measured | Not measured |
+| HTTP non-2xx responses | Not measured | Not measured |
+| Requests completed successfully | Not measured | Not measured |
+
+**Zero failed requests has not been demonstrated.** Synthetic unit-test counts are
+not reported as experiment measurements. See [resume-runtime.md](resume-runtime.md)
+for the exact scoped operation and rollback sequence once readiness is restored.
+
+## Q1(d): Actual architecture and proposed edge extension - 1 mark
+
+![Actual local setup, separate hosted references and proposed edge gateway](architecture/evolve-q1.png)
+
+Editable sources: [Mermaid](architecture/evolve-q1.mmd),
+[SVG](architecture/evolve-q1.svg), [shared layout renderer](../../../scripts/render-q1-architecture.py).
+The PNG and SVG were generated from one layout and visually inspected. Actual
+local names/ports are shown. Neon is provider-confirmed without recording its URL.
+Render is identified by the existing frontend API configuration/project history;
+its live services and process port were not inspected or changed. Grey hosted
+connections are project references, not claims of a verified live connection.
+
+The **purple proposed EV charging-site edge gateway** caches recent availability
+with an explicit short TTL (for example 5 seconds), shows freshness/staleness, and
+buffers telemetry during unreliable connectivity. During a holiday rush, repeated
+nearby availability lookups can be served locally, reducing unnecessary WAN reads
+and response delay. After recovery, timestamped/sequence-labelled telemetry must
+reach the central API for reconciliation and durable storage. Authoritative
+bookings, user/account changes and final session/billing records remain central;
+a stale cache must not authorize conflicting reservations. This is a proposal,
+not implemented hardware or an existing offline-booking capability. EVolve's
+current telemetry is simulated. Edge/fog is chosen because charging sites can
+experience intermittent network connectivity; it complements, rather than replaces,
+central consistency and cloud API capacity.
+
+## Validation, evidence and limitations
+
+See [evidence/verification/results.json](evidence/verification/results.json) and
+logs for exact executed commands and timestamps. Backend suite, frontend API-routing
+tests, production build, benchmark/recovery tests, syntax and Compose models passed.
+Latest source-dependent checks are recorded in `verification/final-delta.json`.
+The existing frontend lint check **failed** with 15 errors and 2 warnings; these
+pre-existing unused-variable/effect issues were not silently fixed or called passed.
+No complete browser end-to-end regression suite exists. Native Nginx checks passed
+for ordinary and all four benchmark/failure configs; an initial stdin validation
+method failed because the input was not read as a regular config file. That failed
+attempt is preserved separately; unique temporary wrapper files validated correctly
+and were removed without reloading the running configuration.
+
+Readiness probes are not benchmarks. The local stack's process liveness is healthy,
+but a configured Neon read connection fails with ETIMEDOUT despite DNS resolution.
+The underlying network/provider cause is not proven. TLS verification was not
+disabled, credentials were not inspected, and no schema/data repair was attempted.
+The blocking dependency is restoring authorized read connectivity from the local
+Docker application to its existing cloud database. Until then, Q1(a) cloud-data
+behavior and Q1(b)/(c) runtime demonstrations remain incomplete.
+
+No application containers/images/networks/volumes were changed. Only the native
+Nginx test process used uniquely named temporary files, removed afterward. No
+migration, application data write, Render deployment/configuration change, commit
+or push occurred. Q2 was not started. GitHub branch reference: https://github.com/arushigrover07/EVolve/tree/da3
+(local work is uncommitted; remote branch contents were not verified or updated).
+Manual genuine screenshots and a three-minute demo checklist are in
+[screenshots-and-demo.md](screenshots-and-demo.md).
+
+## Appendix: all 30 observed proxy requests
+
+| Request | HTTP status | Backend instance ID | Succeeded |
+|---:|---:|---|---|
+| 1 | 200 | `84340d27-c6eb-41b6-9b92-6f9e52e32916` | True |
+| 2 | 200 | `84340d27-c6eb-41b6-9b92-6f9e52e32916` | True |
+| 3 | 200 | `84340d27-c6eb-41b6-9b92-6f9e52e32916` | True |
+| 4 | 200 | `c3ed4594-8a4e-4b71-9a8b-167b0a096489` | True |
+| 5 | 200 | `8bb2c825-4a13-4492-b391-5f44329d8f9f` | True |
+| 6 | 200 | `84340d27-c6eb-41b6-9b92-6f9e52e32916` | True |
+| 7 | 200 | `c3ed4594-8a4e-4b71-9a8b-167b0a096489` | True |
+| 8 | 200 | `8bb2c825-4a13-4492-b391-5f44329d8f9f` | True |
+| 9 | 200 | `84340d27-c6eb-41b6-9b92-6f9e52e32916` | True |
+| 10 | 200 | `c3ed4594-8a4e-4b71-9a8b-167b0a096489` | True |
+| 11 | 200 | `8bb2c825-4a13-4492-b391-5f44329d8f9f` | True |
+| 12 | 200 | `84340d27-c6eb-41b6-9b92-6f9e52e32916` | True |
+| 13 | 200 | `c3ed4594-8a4e-4b71-9a8b-167b0a096489` | True |
+| 14 | 200 | `8bb2c825-4a13-4492-b391-5f44329d8f9f` | True |
+| 15 | 200 | `84340d27-c6eb-41b6-9b92-6f9e52e32916` | True |
+| 16 | 200 | `c3ed4594-8a4e-4b71-9a8b-167b0a096489` | True |
+| 17 | 200 | `8bb2c825-4a13-4492-b391-5f44329d8f9f` | True |
+| 18 | 200 | `84340d27-c6eb-41b6-9b92-6f9e52e32916` | True |
+| 19 | 200 | `84340d27-c6eb-41b6-9b92-6f9e52e32916` | True |
+| 20 | 200 | `c3ed4594-8a4e-4b71-9a8b-167b0a096489` | True |
+| 21 | 200 | `8bb2c825-4a13-4492-b391-5f44329d8f9f` | True |
+| 22 | 200 | `84340d27-c6eb-41b6-9b92-6f9e52e32916` | True |
+| 23 | 200 | `c3ed4594-8a4e-4b71-9a8b-167b0a096489` | True |
+| 24 | 200 | `c3ed4594-8a4e-4b71-9a8b-167b0a096489` | True |
+| 25 | 200 | `8bb2c825-4a13-4492-b391-5f44329d8f9f` | True |
+| 26 | 200 | `84340d27-c6eb-41b6-9b92-6f9e52e32916` | True |
+| 27 | 200 | `c3ed4594-8a4e-4b71-9a8b-167b0a096489` | True |
+| 28 | 200 | `8bb2c825-4a13-4492-b391-5f44329d8f9f` | True |
+| 29 | 200 | `84340d27-c6eb-41b6-9b92-6f9e52e32916` | True |
+| 30 | 200 | `c3ed4594-8a4e-4b71-9a8b-167b0a096489` | True |

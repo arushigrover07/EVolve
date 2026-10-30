@@ -1,0 +1,17 @@
+# Snapshot of image IDs inspected during preparation; review against runtime before use.
+# No environment values are copied. First Compose file must be docker-compose.yml.
+services:
+  backend1:
+    image: sha256:0fd2b2d4ca403d6756563e75a1bb995f7972420bb6694e6d59062fa8b0356d96
+    pull_policy: never
+  backend2:
+    image: sha256:e49ce4df0a98f28653a78ca65546ce9be8481029915a74397c42b592a2c05861
+    pull_policy: never
+  backend3:
+    image: sha256:001dd85f939c6b53bc24fb1a153807ff79f9181712b76b1b36c04240cddc08d3
+    pull_policy: never
+  frontend:
+    image: sha256:046f9aac7098d53939f4ce1f50a0c59e69100c7c0bf88938107112aa29bef8d0
+    pull_policy: never
+    volumes:
+      - ./frontend/nginx.compose.conf:/etc/nginx/conf.d/default.conf:ro

@@ -1,0 +1,1 @@
+PASS: Compose model valid; three internal APIs, same-origin proxy, liveness checks and opt-in telemetry verified. Environment files were not resolved.

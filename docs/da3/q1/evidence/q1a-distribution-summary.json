@@ -1,0 +1,22 @@
+{
+  "requests": 30,
+  "successes": 30,
+  "distinctBackendInstances": 3,
+  "counts": [
+    {
+      "backendInstanceId": "84340d27-c6eb-41b6-9b92-6f9e52e32916",
+      "Count": 12
+    },
+    {
+      "backendInstanceId": "8bb2c825-4a13-4492-b391-5f44329d8f9f",
+      "Count": 8
+    },
+    {
+      "backendInstanceId": "c3ed4594-8a4e-4b71-9a8b-167b0a096489",
+      "Count": 10
+    }
+  ],
+  "endpoint": "/api/instance",
+  "databaseQueries": 0,
+  "note": "Identity/distribution evidence only, not station API readiness or throughput."
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "service": "backend1",
+    "status": 200,
+    "elapsedMs": 3668,
+    "validStationArray": true,
+    "dataSha256": "8dc1a4fd5ba2bcef7bfac5bac7c6e8979952d555fdea0ff14c2c8e3e15873dc2"
+  },
+  {
+    "service": "backend2",
+    "status": 200,
+    "elapsedMs": 3682,
+    "validStationArray": true,
+    "dataSha256": "8dc1a4fd5ba2bcef7bfac5bac7c6e8979952d555fdea0ff14c2c8e3e15873dc2"
+  },
+  {
+    "service": "backend3",
+    "status": 200,
+    "elapsedMs": 4064,
+    "validStationArray": true,
+    "dataSha256": "8dc1a4fd5ba2bcef7bfac5bac7c6e8979952d555fdea0ff14c2c8e3e15873dc2"
+  }
+]

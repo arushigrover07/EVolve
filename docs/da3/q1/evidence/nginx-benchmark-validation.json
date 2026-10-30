@@ -1,0 +1,38 @@
+[
+  {
+    "configuration": "nginx.one.conf",
+    "command": "nginx -t against unique temporary wrapper; no reload",
+    "exitCode": 0,
+    "output": [
+      "nginx: the configuration file /tmp/evolve-q1-validation-ac97bfc55e914a5bbe8acc26670e5ec8.conf syntax is ok",
+      "nginx: configuration file /tmp/evolve-q1-validation-ac97bfc55e914a5bbe8acc26670e5ec8.conf test is successful"
+    ]
+  },
+  {
+    "configuration": "nginx.three.conf",
+    "command": "nginx -t against unique temporary wrapper; no reload",
+    "exitCode": 0,
+    "output": [
+      "nginx: the configuration file /tmp/evolve-q1-validation-0ff783e523ab41e8bb0e7f65c2162c6e.conf syntax is ok",
+      "nginx: configuration file /tmp/evolve-q1-validation-0ff783e523ab41e8bb0e7f65c2162c6e.conf test is successful"
+    ]
+  },
+  {
+    "configuration": "nginx.failover-before.conf",
+    "command": "nginx -t against unique temporary wrapper; no reload",
+    "exitCode": 0,
+    "output": [
+      "nginx: the configuration file /tmp/evolve-q1-validation-a8d88bf8a270418193b82b2d641480ac.conf syntax is ok",
+      "nginx: configuration file /tmp/evolve-q1-validation-a8d88bf8a270418193b82b2d641480ac.conf test is successful"
+    ]
+  },
+  {
+    "configuration": "nginx.failover-after.conf",
+    "command": "nginx -t against unique temporary wrapper; no reload",
+    "exitCode": 0,
+    "output": [
+      "nginx: the configuration file /tmp/evolve-q1-validation-05653357e87745d6ad7954c1859ba89d.conf syntax is ok",
+      "nginx: configuration file /tmp/evolve-q1-validation-05653357e87745d6ad7954c1859ba89d.conf test is successful"
+    ]
+  }
+]

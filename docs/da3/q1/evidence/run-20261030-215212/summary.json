@@ -1,0 +1,56 @@
+{
+  "decision": "READY FOR REVIEW",
+  "branch": "da3",
+  "proxyRequests": 9,
+  "proxyHttp200": 9,
+  "proxyFailures": 0,
+  "firstToLastRequestSeconds": 119.985049,
+  "minimumLatencyMs": 1486,
+  "medianLatencyMs": 3644,
+  "maximumLatencyMs": 4340,
+  "directBackendChecks": [
+    {
+      "service": "backend1",
+      "timestampUtc": "2026-10-30T16:24:48.328Z",
+      "httpStatus": 200,
+      "elapsedMs": 4230,
+      "outcome": "success_valid_station_array"
+    },
+    {
+      "service": "backend2",
+      "timestampUtc": "2026-10-30T16:24:52.664Z",
+      "httpStatus": 200,
+      "elapsedMs": 3855,
+      "outcome": "success_valid_station_array"
+    },
+    {
+      "service": "backend3",
+      "timestampUtc": "2026-10-30T16:24:56.862Z",
+      "httpStatus": 200,
+      "elapsedMs": 3891,
+      "outcome": "success_valid_station_array"
+    }
+  ],
+  "containerImageMountNetworkAndPortsUnchanged": true,
+  "gitStatusUnchanged": true,
+  "baselineCount": 0,
+  "backendHealth": [
+    {
+      "service": "backend1",
+      "running": true,
+      "health": "healthy"
+    },
+    {
+      "service": "backend2",
+      "running": true,
+      "health": "healthy"
+    },
+    {
+      "service": "backend3",
+      "running": true,
+      "health": "healthy"
+    }
+  ],
+  "frontendRunning": true,
+  "note": "Readiness only; no benchmark or lifecycle operations. Permanent resolution is not established. Initial summary formatting failed on PowerShell date conversion; regenerated from saved sanitized observations."
+}

@@ -1,0 +1,88 @@
+{
+  "milestone": "Q1",
+  "date": "2026-10-30",
+  "overallStatus": "EXPERIMENTS_COMPLETED_REJECTED_ZERO_FAILURE",
+  "q1a": {
+    "distributionRequests": 30,
+    "successfulIdentityRequests": 30,
+    "distinctInstances": 3,
+    "stationDistributionRequests": 12,
+    "successfulStationRequests": 12,
+    "stationCounts": [
+      { "backendInstanceId": "84340d27-c6eb-41b6-9b92-6f9e52e32916", "count": 5 },
+      { "backendInstanceId": "8bb2c825-4a13-4492-b391-5f44329d8f9f", "count": 3 },
+      { "backendInstanceId": "c3ed4594-8a4e-4b71-9a8b-167b0a096489", "count": 4 }
+    ],
+    "stationDataSha256": "8dc1a4fd5ba2bcef7bfac5bac7c6e8979952d555fdea0ff14c2c8e3e15873dc2",
+    "stationApiStatus": 200,
+    "cloudReadReady": true
+  },
+  "q1b": {
+    "status": "COMPLETED_REJECTED",
+    "rejectionReason": "Non-zero HTTP failure rate violated threshold rate==0 (processExitCode 99)",
+    "one": {
+      "requests": 1000,
+      "successful": 924,
+      "failed": 76,
+      "rps": 3.3910979261516143,
+      "averageResponseTimeMs": 5833.883446199997,
+      "exitCode": 99,
+      "status": "rejected"
+    },
+    "three": {
+      "requests": 1000,
+      "successful": 967,
+      "failed": 33,
+      "rps": 3.710355278224061,
+      "averageResponseTimeMs": 5328.449515399999,
+      "exitCode": 99,
+      "status": "rejected"
+    },
+    "rpsImprovementPercent": 9.414571990425717,
+    "averageResponseTimeReductionPercent": 8.663764837894674,
+    "zeroFailuresDemonstrated": false
+  },
+  "q1c": {
+    "status": "COMPLETED",
+    "before": {
+      "clientRequests": 1000,
+      "successfulRequests": 907,
+      "failedRequests": 93,
+      "transportErrors": 0,
+      "timeouts": 0,
+      "httpNon2xx": 93,
+      "statusCounts": {
+        "200": 907,
+        "500": 12,
+        "502": 68,
+        "504": 13
+      },
+      "failureRatePercent": 9.3
+    },
+    "after": {
+      "clientRequests": 1000,
+      "successfulRequests": 995,
+      "failedRequests": 5,
+      "transportErrors": 0,
+      "timeouts": 0,
+      "httpNon2xx": 5,
+      "statusCounts": {
+        "200": 995,
+        "500": 5
+      },
+      "failureRatePercent": 0.5
+    },
+    "failureReductionPercent": 94.6236559139785,
+    "gatewayErrorsEliminated": true,
+    "zeroFailuresDemonstrated": false,
+    "recoverySucceeded": true
+  },
+  "q1d": {
+    "status": "REPORT_READY_PROPOSED_EDGE_MARKED",
+    "svg": "architecture/evolve-q1.svg",
+    "png": "architecture/evolve-q1.png"
+  },
+  "runtimeRestored": true,
+  "originalImagesRestored": true,
+  "portableToolVersion": "k6.exe v1.8.2 (commit/682f083071, go1.26.9, windows/amd64)"
+}

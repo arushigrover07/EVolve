@@ -1,0 +1,19 @@
+ M .gitignore
+ M backend/Dockerfile
+ M backend/db.js
+ M backend/package.json
+ M backend/server.js
+ M backend/services/telemetryService.js
+ M docker-compose.yml
+ M frontend/src/config.js
+?? backend/app.js
+?? backend/dbConfig.js
+?? backend/logging.js
+?? backend/shutdown.js
+?? backend/test/
+?? backend/workers/
+?? benchmarks/
+?? database/migrations/
+?? docs/
+?? frontend/nginx.compose.conf
+?? scripts/

@@ -1,0 +1,16 @@
+name: evolve-q1b-baseline
+services:
+  baseline-proxy:
+    # Reuse the locally present frontend image; never pull or build a new image.
+    image: ${Q1B_PROXY_IMAGE:?Set the approved immutable frontend image ID}
+    pull_policy: never
+    ports:
+      - "127.0.0.1:5174:80"
+    volumes:
+      - ./nginx.one.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - existing
+networks:
+  existing:
+    external: true
+    name: evolve_default

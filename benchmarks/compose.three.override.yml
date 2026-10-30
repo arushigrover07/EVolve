@@ -1,0 +1,16 @@
+# Future approved runtime only. Paths are relative to the FIRST Compose file (repo root).
+services:
+  backend1:
+    image: ${Q1B_BACKEND_IMAGE:?Set the approved immutable backend image ID}
+    pull_policy: never
+  backend2:
+    image: ${Q1B_BACKEND_IMAGE:?Set the approved immutable backend image ID}
+    pull_policy: never
+  backend3:
+    image: ${Q1B_BACKEND_IMAGE:?Set the approved immutable backend image ID}
+    pull_policy: never
+  frontend:
+    image: ${Q1B_PROXY_IMAGE:?Set the approved immutable frontend image ID}
+    pull_policy: never
+    volumes:
+      - ./benchmarks/nginx.three.conf:/etc/nginx/conf.d/default.conf:ro

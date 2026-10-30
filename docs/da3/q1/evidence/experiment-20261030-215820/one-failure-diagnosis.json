@@ -1,0 +1,16 @@
+{
+  "baselineProxyRequests": [
+    {
+      "httpStatus": 200,
+      "Count": 926
+    },
+    {
+      "httpStatus": 500,
+      "Count": 76
+    }
+  ],
+  "backendStationErrorLines": 76,
+  "backendUnclassifiedErrors": 76,
+  "rawLogsSuppressed": true,
+  "note": "Proxy totals include two explicit unmeasured data-snapshot requests."
+}

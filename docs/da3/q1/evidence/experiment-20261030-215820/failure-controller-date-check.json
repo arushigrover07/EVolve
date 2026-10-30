@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "check": "Failure controller handles PowerShell JSON DateTime conversion without locale-sensitive reparsing",
+  "elapsedSeconds": 8.5
+}

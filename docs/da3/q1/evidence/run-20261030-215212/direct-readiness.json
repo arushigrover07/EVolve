@@ -1,0 +1,23 @@
+[
+  {
+    "service": "backend1",
+    "timestampUtc": "2026-10-30T16:24:48.328Z",
+    "httpStatus": 200,
+    "elapsedMs": 4230,
+    "outcome": "success_valid_station_array"
+  },
+  {
+    "service": "backend2",
+    "timestampUtc": "2026-10-30T16:24:52.664Z",
+    "httpStatus": 200,
+    "elapsedMs": 3855,
+    "outcome": "success_valid_station_array"
+  },
+  {
+    "service": "backend3",
+    "timestampUtc": "2026-10-30T16:24:56.862Z",
+    "httpStatus": 200,
+    "elapsedMs": 3891,
+    "outcome": "success_valid_station_array"
+  }
+]

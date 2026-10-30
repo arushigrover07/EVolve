@@ -1,0 +1,5 @@
+# Merge AFTER docker-compose.yml and compose.three.override.yml. Explicit local project evolve.
+services:
+  frontend:
+    volumes:
+      - ./benchmarks/nginx.failover-${Q1C_PHASE:?Set before or after}.conf:/etc/nginx/conf.d/default.conf:ro

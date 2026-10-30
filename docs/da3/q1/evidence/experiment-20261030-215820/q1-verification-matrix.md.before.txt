@@ -1,0 +1,31 @@
+# Q1 requirement verification matrix
+
+Status key: I = implemented; T = tested; E = genuine runtime evidence; R = report-ready.
+A prepared script or passing synthetic test alone does not demonstrate runtime behavior.
+Original rubric: Q1(a) 1 mark; (b) 1.5; (c) 1.5; (d) 1. Total 5.
+
+| Requirement | Implementation location | Test/command run | Result | Evidence artifact | Status |
+|---|---|---|---|---|---|
+| Q1(a) scenario and busiest API | q1-report.md; backend/app.js | Source inspection of GET /api/stations and frontend caller | Holiday departure search rush; SELECT aggregation, no writes | q1-report.md | I yes; T inspected; E source; R yes |
+| Q1(a) three backend containers | docker-compose.yml | Limited docker inspect | Three owned running healthy API processes, internal 5000 | evidence/runtime-before.json; runtime-after.json | I/T/E/R yes for liveness |
+| Q1(a) Nginx load balancing | frontend/nginx.compose.conf | Native nginx -t; actual proxy probes | Configuration passes; requests distributed | evidence/nginx-runtime-validation.json; q1a-distribution.csv | I/T/E/R yes |
+| Q1(a) cloud database connection | backend/dbConfig.js; db.js | Sanitized SELECT 1; DNS check | Configured Neon; DNS resolves; connection ETIMEDOUT | evidence/database-connection-check.json | I yes; T failed; E blocked; R blocker documented |
+| Q1(a) all three receive requests | scripts/collect-q1a.ps1 | 30 GET /api/instance through 5173 | 30 HTTP 200; counts 12, 10, 8 | evidence/q1a-distribution.csv; instance-service-map.json | I/T/E/R yes for identity endpoint |
+| Q1(a) equivalent station data | backend/app.js | Stations check per replica | All three HTTP 500; equivalence of successful data unproven | evidence/instance-service-map.json | I yes; T failed; E BLOCKED; R incomplete |
+| Q1(a/b) same immutable image cohort | compose.three.override.yml; compose.rollback.yml | Limited image inspection; Compose validation | Filesystem layers equal; current IDs differ; alignment NOT applied | evidence/runtime-before.json; benchmarks/README.md | I prepared; T offline; E BLOCKED; R limitation stated |
+| Q1(b) exactly 1000 requests, one backend | benchmarks/q1b.mjs; scripts/benchmark-q1b.ps1 | Offline tests and native inspect; station readiness fails | NOT RUN | benchmarks/status.json; evidence/verification/ | I yes; T offline; E BLOCKED; R incomplete |
+| Q1(b) exactly 1000 requests, three backends | Same workload/runner | Same safe checks | NOT RUN | benchmarks/status.json | I yes; T offline; E BLOCKED; R incomplete |
+| Q1(b) same tool and concurrency | q1b.mjs; result-validation.cjs | Native k6 inspect; separate 20-request health smoke | k6 1.8.2; 20 VUs; smoke not performance evidence | evidence/k6-tool.json; native-liveness-smoke.raw.json | I/T yes; E paired runs absent; R protocol ready |
+| Q1(b) RPS/average response comparison | scripts/compare-q1b.ps1 | Synthetic acceptance/rejection tests | No real results; no percentage calculated | evidence/verification/benchmark-tests-final.txt; q1-report.md | I/T yes; E BLOCKED; R incomplete |
+| Q1(c) instance stopped during active load | scripts/run-q1c.ps1; q1c.mjs | Syntax and synthetic evidence validation | NO backend stopped | benchmarks/status.json | I prepared; T offline; E BLOCKED; R incomplete |
+| Q1(c) before failure count | nginx.failover-before.conf | Native config test; offline metric tests | NOT MEASURED | evidence/nginx-benchmark-validation.json | I/T offline; E BLOCKED; R incomplete |
+| Q1(c) after failure count | nginx.failover-after.conf | Same checks | NOT MEASURED; no zero-failure claim | evidence/nginx-benchmark-validation.json | I/T offline; E BLOCKED; R incomplete |
+| Q1(c) Nginx failover behavior | Isolated before/after configs | Native syntax, offline classification | Bounded GET-only retries; runtime behavior unproven | q1-report.md; resume-runtime.md | I yes; T offline; E BLOCKED; R incomplete |
+| Q1(d) actual architecture diagram | architecture/evolve-q1.svg/.png/.mmd | Runtime/source consistency review; visual inspection | Actual ports and separate local/hosted boundaries | architecture/evolve-q1.png | I/T/E/R yes; hosted state explicitly unverified |
+| Q1(d) extension in different colour | Purple proposed site edge gateway | Visual/source review | Proposed cache/telemetry buffer clearly marked | architecture/evolve-q1.svg | I/T/E/R yes as design proposal |
+| Q1(d) domain-specific explanation | q1-report.md | Review against holiday charging scenario | TTL/freshness, central booking authority and reconciliation described | q1-report.md | I/T/E/R yes as design proposal |
+
+Runtime completion remains blocked by local-to-Neon read connectivity. Frontend lint also fails
+with 15 existing errors and 2 warnings. Exact commands, outcomes and logs are in
+[evidence/verification/results.json](evidence/verification/results.json) and
+[evidence/verification/final-delta.json](evidence/verification/final-delta.json).

@@ -1,0 +1,808 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: C:\Users\Arushi Grover\OneDrive\EVolve\benchmarks\q1c.mjs
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 20 max VUs, 30m25s max duration (incl. graceful stop):
+              * failure: 1000 iterations shared among 20 VUs (maxDuration: 30m0s, gracefulStop: 25s)
+
+
+running (00m01.0s), 20/20 VUs, 0 complete and 0 interrupted iterations
+failure   [   0% ] 20 VUs  00m01.0s/30m0s  0000/1000 shared iters
+
+running (00m02.0s), 20/20 VUs, 2 complete and 0 interrupted iterations
+failure   [   0% ] 20 VUs  00m02.0s/30m0s  0002/1000 shared iters
+
+running (00m03.0s), 20/20 VUs, 2 complete and 0 interrupted iterations
+failure   [   0% ] 20 VUs  00m03.0s/30m0s  0002/1000 shared iters
+
+running (00m04.0s), 20/20 VUs, 3 complete and 0 interrupted iterations
+failure   [   0% ] 20 VUs  00m04.0s/30m0s  0003/1000 shared iters
+
+running (00m05.0s), 20/20 VUs, 5 complete and 0 interrupted iterations
+failure   [   0% ] 20 VUs  00m05.0s/30m0s  0005/1000 shared iters
+
+running (00m06.0s), 20/20 VUs, 9 complete and 0 interrupted iterations
+failure   [   1% ] 20 VUs  00m06.0s/30m0s  0009/1000 shared iters
+
+running (00m07.0s), 20/20 VUs, 10 complete and 0 interrupted iterations
+failure   [   1% ] 20 VUs  00m07.0s/30m0s  0010/1000 shared iters
+
+running (00m08.0s), 20/20 VUs, 12 complete and 0 interrupted iterations
+failure   [   1% ] 20 VUs  00m08.0s/30m0s  0012/1000 shared iters
+
+running (00m09.0s), 20/20 VUs, 14 complete and 0 interrupted iterations
+failure   [   1% ] 20 VUs  00m09.0s/30m0s  0014/1000 shared iters
+
+running (00m10.0s), 20/20 VUs, 17 complete and 0 interrupted iterations
+failure   [   2% ] 20 VUs  00m10.0s/30m0s  0017/1000 shared iters
+
+running (00m11.0s), 20/20 VUs, 25 complete and 0 interrupted iterations
+failure   [   2% ] 20 VUs  00m11.0s/30m0s  0025/1000 shared iters
+
+running (00m12.0s), 20/20 VUs, 26 complete and 0 interrupted iterations
+failure   [   3% ] 20 VUs  00m12.0s/30m0s  0026/1000 shared iters
+
+running (00m13.0s), 20/20 VUs, 28 complete and 0 interrupted iterations
+failure   [   3% ] 20 VUs  00m13.0s/30m0s  0028/1000 shared iters
+
+running (00m14.0s), 20/20 VUs, 38 complete and 0 interrupted iterations
+failure   [   4% ] 20 VUs  00m14.0s/30m0s  0038/1000 shared iters
+
+running (00m15.0s), 20/20 VUs, 39 complete and 0 interrupted iterations
+failure   [   4% ] 20 VUs  00m15.0s/30m0s  0039/1000 shared iters
+
+running (00m16.0s), 20/20 VUs, 45 complete and 0 interrupted iterations
+failure   [   4% ] 20 VUs  00m16.0s/30m0s  0045/1000 shared iters
+
+running (00m17.0s), 20/20 VUs, 48 complete and 0 interrupted iterations
+failure   [   5% ] 20 VUs  00m17.0s/30m0s  0048/1000 shared iters
+
+running (00m18.0s), 20/20 VUs, 51 complete and 0 interrupted iterations
+failure   [   5% ] 20 VUs  00m18.0s/30m0s  0051/1000 shared iters
+
+running (00m19.0s), 20/20 VUs, 57 complete and 0 interrupted iterations
+failure   [   6% ] 20 VUs  00m19.0s/30m0s  0057/1000 shared iters
+
+running (00m20.0s), 20/20 VUs, 61 complete and 0 interrupted iterations
+failure   [   6% ] 20 VUs  00m20.0s/30m0s  0061/1000 shared iters
+
+running (00m21.0s), 20/20 VUs, 64 complete and 0 interrupted iterations
+failure   [   6% ] 20 VUs  00m21.0s/30m0s  0064/1000 shared iters
+
+running (00m22.0s), 20/20 VUs, 66 complete and 0 interrupted iterations
+failure   [   7% ] 20 VUs  00m22.0s/30m0s  0066/1000 shared iters
+
+running (00m23.0s), 20/20 VUs, 73 complete and 0 interrupted iterations
+failure   [   7% ] 20 VUs  00m23.0s/30m0s  0073/1000 shared iters
+
+running (00m24.0s), 20/20 VUs, 78 complete and 0 interrupted iterations
+failure   [   8% ] 20 VUs  00m24.0s/30m0s  0078/1000 shared iters
+
+running (00m25.0s), 20/20 VUs, 80 complete and 0 interrupted iterations
+failure   [   8% ] 20 VUs  00m25.0s/30m0s  0080/1000 shared iters
+
+running (00m26.0s), 20/20 VUs, 85 complete and 0 interrupted iterations
+failure   [   8% ] 20 VUs  00m26.0s/30m0s  0085/1000 shared iters
+
+running (00m27.0s), 20/20 VUs, 88 complete and 0 interrupted iterations
+failure   [   9% ] 20 VUs  00m27.0s/30m0s  0088/1000 shared iters
+
+running (00m28.0s), 20/20 VUs, 91 complete and 0 interrupted iterations
+failure   [   9% ] 20 VUs  00m28.0s/30m0s  0091/1000 shared iters
+
+running (00m29.0s), 20/20 VUs, 95 complete and 0 interrupted iterations
+failure   [  10% ] 20 VUs  00m29.0s/30m0s  0095/1000 shared iters
+
+running (00m30.0s), 20/20 VUs, 99 complete and 0 interrupted iterations
+failure   [  10% ] 20 VUs  00m30.0s/30m0s  0099/1000 shared iters
+
+running (00m31.0s), 20/20 VUs, 105 complete and 0 interrupted iterations
+failure   [  10% ] 20 VUs  00m31.0s/30m0s  0105/1000 shared iters
+
+running (00m32.0s), 20/20 VUs, 105 complete and 0 interrupted iterations
+failure   [  10% ] 20 VUs  00m32.0s/30m0s  0105/1000 shared iters
+
+running (00m33.0s), 20/20 VUs, 113 complete and 0 interrupted iterations
+failure   [  11% ] 20 VUs  00m33.0s/30m0s  0113/1000 shared iters
+
+running (00m34.0s), 20/20 VUs, 115 complete and 0 interrupted iterations
+failure   [  12% ] 20 VUs  00m34.0s/30m0s  0115/1000 shared iters
+
+running (00m35.0s), 20/20 VUs, 119 complete and 0 interrupted iterations
+failure   [  12% ] 20 VUs  00m35.0s/30m0s  0119/1000 shared iters
+
+running (00m36.0s), 20/20 VUs, 122 complete and 0 interrupted iterations
+failure   [  12% ] 20 VUs  00m36.0s/30m0s  0122/1000 shared iters
+
+running (00m37.0s), 20/20 VUs, 127 complete and 0 interrupted iterations
+failure   [  13% ] 20 VUs  00m37.0s/30m0s  0127/1000 shared iters
+
+running (00m38.0s), 20/20 VUs, 129 complete and 0 interrupted iterations
+failure   [  13% ] 20 VUs  00m38.0s/30m0s  0129/1000 shared iters
+
+running (00m39.0s), 20/20 VUs, 134 complete and 0 interrupted iterations
+failure   [  13% ] 20 VUs  00m39.0s/30m0s  0134/1000 shared iters
+
+running (00m40.0s), 20/20 VUs, 138 complete and 0 interrupted iterations
+failure   [  14% ] 20 VUs  00m40.0s/30m0s  0138/1000 shared iters
+
+running (00m41.0s), 20/20 VUs, 140 complete and 0 interrupted iterations
+failure   [  14% ] 20 VUs  00m41.0s/30m0s  0140/1000 shared iters
+
+running (00m42.0s), 20/20 VUs, 146 complete and 0 interrupted iterations
+failure   [  15% ] 20 VUs  00m42.0s/30m0s  0146/1000 shared iters
+
+running (00m43.0s), 20/20 VUs, 150 complete and 0 interrupted iterations
+failure   [  15% ] 20 VUs  00m43.0s/30m0s  0150/1000 shared iters
+
+running (00m44.0s), 20/20 VUs, 153 complete and 0 interrupted iterations
+failure   [  15% ] 20 VUs  00m44.0s/30m0s  0153/1000 shared iters
+
+running (00m45.0s), 20/20 VUs, 157 complete and 0 interrupted iterations
+failure   [  16% ] 20 VUs  00m45.0s/30m0s  0157/1000 shared iters
+
+running (00m46.1s), 20/20 VUs, 162 complete and 0 interrupted iterations
+failure   [  16% ] 20 VUs  00m46.1s/30m0s  0162/1000 shared iters
+
+running (00m47.0s), 20/20 VUs, 164 complete and 0 interrupted iterations
+failure   [  16% ] 20 VUs  00m47.0s/30m0s  0164/1000 shared iters
+
+running (00m48.0s), 20/20 VUs, 169 complete and 0 interrupted iterations
+failure   [  17% ] 20 VUs  00m48.0s/30m0s  0169/1000 shared iters
+
+running (00m49.0s), 20/20 VUs, 172 complete and 0 interrupted iterations
+failure   [  17% ] 20 VUs  00m49.0s/30m0s  0172/1000 shared iters
+
+running (00m50.0s), 20/20 VUs, 177 complete and 0 interrupted iterations
+failure   [  18% ] 20 VUs  00m50.0s/30m0s  0177/1000 shared iters
+
+running (00m51.0s), 20/20 VUs, 182 complete and 0 interrupted iterations
+failure   [  18% ] 20 VUs  00m51.0s/30m0s  0182/1000 shared iters
+
+running (00m52.0s), 20/20 VUs, 184 complete and 0 interrupted iterations
+failure   [  18% ] 20 VUs  00m52.0s/30m0s  0184/1000 shared iters
+
+running (00m53.0s), 20/20 VUs, 189 complete and 0 interrupted iterations
+failure   [  19% ] 20 VUs  00m53.0s/30m0s  0189/1000 shared iters
+
+running (00m54.0s), 20/20 VUs, 193 complete and 0 interrupted iterations
+failure   [  19% ] 20 VUs  00m54.0s/30m0s  0193/1000 shared iters
+
+running (00m55.0s), 20/20 VUs, 199 complete and 0 interrupted iterations
+failure   [  20% ] 20 VUs  00m55.0s/30m0s  0199/1000 shared iters
+
+running (00m56.0s), 20/20 VUs, 200 complete and 0 interrupted iterations
+failure   [  20% ] 20 VUs  00m56.0s/30m0s  0200/1000 shared iters
+
+running (00m57.0s), 20/20 VUs, 206 complete and 0 interrupted iterations
+failure   [  21% ] 20 VUs  00m57.0s/30m0s  0206/1000 shared iters
+
+running (00m58.0s), 20/20 VUs, 209 complete and 0 interrupted iterations
+failure   [  21% ] 20 VUs  00m58.0s/30m0s  0209/1000 shared iters
+
+running (00m59.0s), 20/20 VUs, 210 complete and 0 interrupted iterations
+failure   [  21% ] 20 VUs  00m59.0s/30m0s  0210/1000 shared iters
+
+running (01m00.0s), 20/20 VUs, 217 complete and 0 interrupted iterations
+failure   [  22% ] 20 VUs  01m00.0s/30m0s  0217/1000 shared iters
+
+running (01m01.0s), 20/20 VUs, 221 complete and 0 interrupted iterations
+failure   [  22% ] 20 VUs  01m01.0s/30m0s  0221/1000 shared iters
+
+running (01m02.0s), 20/20 VUs, 224 complete and 0 interrupted iterations
+failure   [  22% ] 20 VUs  01m02.0s/30m0s  0224/1000 shared iters
+
+running (01m03.1s), 20/20 VUs, 228 complete and 0 interrupted iterations
+failure   [  23% ] 20 VUs  01m03.1s/30m0s  0228/1000 shared iters
+
+running (01m04.0s), 20/20 VUs, 232 complete and 0 interrupted iterations
+failure   [  23% ] 20 VUs  01m04.0s/30m0s  0232/1000 shared iters
+
+running (01m05.0s), 20/20 VUs, 235 complete and 0 interrupted iterations
+failure   [  24% ] 20 VUs  01m05.0s/30m0s  0235/1000 shared iters
+
+running (01m06.0s), 20/20 VUs, 239 complete and 0 interrupted iterations
+failure   [  24% ] 20 VUs  01m06.0s/30m0s  0239/1000 shared iters
+
+running (01m07.0s), 20/20 VUs, 246 complete and 0 interrupted iterations
+failure   [  25% ] 20 VUs  01m07.0s/30m0s  0246/1000 shared iters
+
+running (01m08.0s), 20/20 VUs, 246 complete and 0 interrupted iterations
+failure   [  25% ] 20 VUs  01m08.0s/30m0s  0246/1000 shared iters
+
+running (01m09.0s), 20/20 VUs, 251 complete and 0 interrupted iterations
+failure   [  25% ] 20 VUs  01m09.0s/30m0s  0251/1000 shared iters
+
+running (01m10.0s), 20/20 VUs, 255 complete and 0 interrupted iterations
+failure   [  26% ] 20 VUs  01m10.0s/30m0s  0255/1000 shared iters
+
+running (01m11.0s), 20/20 VUs, 259 complete and 0 interrupted iterations
+failure   [  26% ] 20 VUs  01m11.0s/30m0s  0259/1000 shared iters
+
+running (01m12.0s), 20/20 VUs, 263 complete and 0 interrupted iterations
+failure   [  26% ] 20 VUs  01m12.0s/30m0s  0263/1000 shared iters
+
+running (01m13.0s), 20/20 VUs, 267 complete and 0 interrupted iterations
+failure   [  27% ] 20 VUs  01m13.0s/30m0s  0267/1000 shared iters
+
+running (01m14.0s), 20/20 VUs, 269 complete and 0 interrupted iterations
+failure   [  27% ] 20 VUs  01m14.0s/30m0s  0269/1000 shared iters
+
+running (01m15.0s), 20/20 VUs, 276 complete and 0 interrupted iterations
+failure   [  28% ] 20 VUs  01m15.0s/30m0s  0276/1000 shared iters
+
+running (01m16.0s), 20/20 VUs, 280 complete and 0 interrupted iterations
+failure   [  28% ] 20 VUs  01m16.0s/30m0s  0280/1000 shared iters
+
+running (01m17.0s), 20/20 VUs, 281 complete and 0 interrupted iterations
+failure   [  28% ] 20 VUs  01m17.0s/30m0s  0281/1000 shared iters
+
+running (01m18.0s), 20/20 VUs, 288 complete and 0 interrupted iterations
+failure   [  29% ] 20 VUs  01m18.0s/30m0s  0288/1000 shared iters
+
+running (01m19.0s), 20/20 VUs, 291 complete and 0 interrupted iterations
+failure   [  29% ] 20 VUs  01m19.0s/30m0s  0291/1000 shared iters
+
+running (01m20.0s), 20/20 VUs, 293 complete and 0 interrupted iterations
+failure   [  29% ] 20 VUs  01m20.0s/30m0s  0293/1000 shared iters
+
+running (01m21.0s), 20/20 VUs, 298 complete and 0 interrupted iterations
+failure   [  30% ] 20 VUs  01m21.0s/30m0s  0298/1000 shared iters
+
+running (01m22.0s), 20/20 VUs, 302 complete and 0 interrupted iterations
+failure   [  30% ] 20 VUs  01m22.0s/30m0s  0302/1000 shared iters
+
+running (01m23.0s), 20/20 VUs, 307 complete and 0 interrupted iterations
+failure   [  31% ] 20 VUs  01m23.0s/30m0s  0307/1000 shared iters
+
+running (01m24.0s), 20/20 VUs, 309 complete and 0 interrupted iterations
+failure   [  31% ] 20 VUs  01m24.0s/30m0s  0309/1000 shared iters
+
+running (01m25.0s), 20/20 VUs, 315 complete and 0 interrupted iterations
+failure   [  32% ] 20 VUs  01m25.0s/30m0s  0315/1000 shared iters
+
+running (01m26.0s), 20/20 VUs, 317 complete and 0 interrupted iterations
+failure   [  32% ] 20 VUs  01m26.0s/30m0s  0317/1000 shared iters
+
+running (01m27.0s), 20/20 VUs, 322 complete and 0 interrupted iterations
+failure   [  32% ] 20 VUs  01m27.0s/30m0s  0322/1000 shared iters
+
+running (01m28.0s), 20/20 VUs, 326 complete and 0 interrupted iterations
+failure   [  33% ] 20 VUs  01m28.0s/30m0s  0326/1000 shared iters
+
+running (01m29.0s), 20/20 VUs, 330 complete and 0 interrupted iterations
+failure   [  33% ] 20 VUs  01m29.0s/30m0s  0330/1000 shared iters
+
+running (01m30.0s), 20/20 VUs, 332 complete and 0 interrupted iterations
+failure   [  33% ] 20 VUs  01m30.0s/30m0s  0332/1000 shared iters
+
+running (01m31.0s), 20/20 VUs, 337 complete and 0 interrupted iterations
+failure   [  34% ] 20 VUs  01m31.0s/30m0s  0337/1000 shared iters
+
+running (01m32.0s), 20/20 VUs, 342 complete and 0 interrupted iterations
+failure   [  34% ] 20 VUs  01m32.0s/30m0s  0342/1000 shared iters
+
+running (01m33.0s), 20/20 VUs, 348 complete and 0 interrupted iterations
+failure   [  35% ] 20 VUs  01m33.0s/30m0s  0348/1000 shared iters
+
+running (01m34.0s), 20/20 VUs, 348 complete and 0 interrupted iterations
+failure   [  35% ] 20 VUs  01m34.0s/30m0s  0348/1000 shared iters
+
+running (01m35.0s), 20/20 VUs, 354 complete and 0 interrupted iterations
+failure   [  35% ] 20 VUs  01m35.0s/30m0s  0354/1000 shared iters
+
+running (01m36.0s), 20/20 VUs, 358 complete and 0 interrupted iterations
+failure   [  36% ] 20 VUs  01m36.0s/30m0s  0358/1000 shared iters
+
+running (01m37.0s), 20/20 VUs, 360 complete and 0 interrupted iterations
+failure   [  36% ] 20 VUs  01m37.0s/30m0s  0360/1000 shared iters
+
+running (01m38.0s), 20/20 VUs, 366 complete and 0 interrupted iterations
+failure   [  37% ] 20 VUs  01m38.0s/30m0s  0366/1000 shared iters
+
+running (01m39.0s), 20/20 VUs, 369 complete and 0 interrupted iterations
+failure   [  37% ] 20 VUs  01m39.0s/30m0s  0369/1000 shared iters
+
+running (01m40.0s), 20/20 VUs, 373 complete and 0 interrupted iterations
+failure   [  37% ] 20 VUs  01m40.0s/30m0s  0373/1000 shared iters
+
+running (01m41.0s), 20/20 VUs, 376 complete and 0 interrupted iterations
+failure   [  38% ] 20 VUs  01m41.0s/30m0s  0376/1000 shared iters
+
+running (01m42.0s), 20/20 VUs, 381 complete and 0 interrupted iterations
+failure   [  38% ] 20 VUs  01m42.0s/30m0s  0381/1000 shared iters
+
+running (01m43.0s), 20/20 VUs, 383 complete and 0 interrupted iterations
+failure   [  38% ] 20 VUs  01m43.0s/30m0s  0383/1000 shared iters
+
+running (01m44.0s), 20/20 VUs, 388 complete and 0 interrupted iterations
+failure   [  39% ] 20 VUs  01m44.0s/30m0s  0388/1000 shared iters
+
+running (01m45.0s), 20/20 VUs, 392 complete and 0 interrupted iterations
+failure   [  39% ] 20 VUs  01m45.0s/30m0s  0392/1000 shared iters
+
+running (01m46.0s), 20/20 VUs, 396 complete and 0 interrupted iterations
+failure   [  40% ] 20 VUs  01m46.0s/30m0s  0396/1000 shared iters
+
+running (01m47.0s), 20/20 VUs, 399 complete and 0 interrupted iterations
+failure   [  40% ] 20 VUs  01m47.0s/30m0s  0399/1000 shared iters
+
+running (01m48.0s), 20/20 VUs, 405 complete and 0 interrupted iterations
+failure   [  40% ] 20 VUs  01m48.0s/30m0s  0405/1000 shared iters
+
+running (01m49.0s), 20/20 VUs, 407 complete and 0 interrupted iterations
+failure   [  41% ] 20 VUs  01m49.0s/30m0s  0407/1000 shared iters
+
+running (01m50.0s), 20/20 VUs, 412 complete and 0 interrupted iterations
+failure   [  41% ] 20 VUs  01m50.0s/30m0s  0412/1000 shared iters
+
+running (01m51.0s), 20/20 VUs, 417 complete and 0 interrupted iterations
+failure   [  42% ] 20 VUs  01m51.0s/30m0s  0417/1000 shared iters
+
+running (01m52.0s), 20/20 VUs, 419 complete and 0 interrupted iterations
+failure   [  42% ] 20 VUs  01m52.0s/30m0s  0419/1000 shared iters
+
+running (01m53.0s), 20/20 VUs, 424 complete and 0 interrupted iterations
+failure   [  42% ] 20 VUs  01m53.0s/30m0s  0424/1000 shared iters
+
+running (01m54.0s), 20/20 VUs, 426 complete and 0 interrupted iterations
+failure   [  43% ] 20 VUs  01m54.0s/30m0s  0426/1000 shared iters
+
+running (01m55.0s), 20/20 VUs, 431 complete and 0 interrupted iterations
+failure   [  43% ] 20 VUs  01m55.0s/30m0s  0431/1000 shared iters
+
+running (01m56.0s), 20/20 VUs, 434 complete and 0 interrupted iterations
+failure   [  43% ] 20 VUs  01m56.0s/30m0s  0434/1000 shared iters
+
+running (01m57.0s), 20/20 VUs, 439 complete and 0 interrupted iterations
+failure   [  44% ] 20 VUs  01m57.0s/30m0s  0439/1000 shared iters
+
+running (01m58.0s), 20/20 VUs, 443 complete and 0 interrupted iterations
+failure   [  44% ] 20 VUs  01m58.0s/30m0s  0443/1000 shared iters
+
+running (01m59.0s), 20/20 VUs, 446 complete and 0 interrupted iterations
+failure   [  45% ] 20 VUs  01m59.0s/30m0s  0446/1000 shared iters
+
+running (02m00.0s), 20/20 VUs, 453 complete and 0 interrupted iterations
+failure   [  45% ] 20 VUs  02m00.0s/30m0s  0453/1000 shared iters
+
+running (02m01.0s), 20/20 VUs, 456 complete and 0 interrupted iterations
+failure   [  46% ] 20 VUs  02m01.0s/30m0s  0456/1000 shared iters
+
+running (02m02.0s), 20/20 VUs, 458 complete and 0 interrupted iterations
+failure   [  46% ] 20 VUs  02m02.0s/30m0s  0458/1000 shared iters
+
+running (02m03.0s), 20/20 VUs, 462 complete and 0 interrupted iterations
+failure   [  46% ] 20 VUs  02m03.0s/30m0s  0462/1000 shared iters
+
+running (02m04.0s), 20/20 VUs, 467 complete and 0 interrupted iterations
+failure   [  47% ] 20 VUs  02m04.0s/30m0s  0467/1000 shared iters
+
+running (02m05.0s), 20/20 VUs, 470 complete and 0 interrupted iterations
+failure   [  47% ] 20 VUs  02m05.0s/30m0s  0470/1000 shared iters
+
+running (02m06.0s), 20/20 VUs, 475 complete and 0 interrupted iterations
+failure   [  48% ] 20 VUs  02m06.0s/30m0s  0475/1000 shared iters
+
+running (02m07.2s), 20/20 VUs, 480 complete and 0 interrupted iterations
+failure   [  48% ] 20 VUs  02m07.2s/30m0s  0480/1000 shared iters
+
+running (02m08.0s), 20/20 VUs, 482 complete and 0 interrupted iterations
+failure   [  48% ] 20 VUs  02m08.0s/30m0s  0482/1000 shared iters
+
+running (02m09.0s), 20/20 VUs, 487 complete and 0 interrupted iterations
+failure   [  49% ] 20 VUs  02m09.0s/30m0s  0487/1000 shared iters
+
+running (02m10.1s), 20/20 VUs, 490 complete and 0 interrupted iterations
+failure   [  49% ] 20 VUs  02m10.1s/30m0s  0490/1000 shared iters
+
+running (02m11.0s), 20/20 VUs, 495 complete and 0 interrupted iterations
+failure   [  50% ] 20 VUs  02m11.0s/30m0s  0495/1000 shared iters
+
+running (02m12.0s), 20/20 VUs, 497 complete and 0 interrupted iterations
+failure   [  50% ] 20 VUs  02m12.0s/30m0s  0497/1000 shared iters
+
+running (02m13.0s), 20/20 VUs, 502 complete and 0 interrupted iterations
+failure   [  50% ] 20 VUs  02m13.0s/30m0s  0502/1000 shared iters
+
+running (02m14.0s), 20/20 VUs, 506 complete and 0 interrupted iterations
+failure   [  51% ] 20 VUs  02m14.0s/30m0s  0506/1000 shared iters
+
+running (02m15.0s), 20/20 VUs, 511 complete and 0 interrupted iterations
+failure   [  51% ] 20 VUs  02m15.0s/30m0s  0511/1000 shared iters
+
+running (02m16.0s), 20/20 VUs, 513 complete and 0 interrupted iterations
+failure   [  51% ] 20 VUs  02m16.0s/30m0s  0513/1000 shared iters
+
+running (02m17.0s), 20/20 VUs, 518 complete and 0 interrupted iterations
+failure   [  52% ] 20 VUs  02m17.0s/30m0s  0518/1000 shared iters
+
+running (02m18.0s), 20/20 VUs, 523 complete and 0 interrupted iterations
+failure   [  52% ] 20 VUs  02m18.0s/30m0s  0523/1000 shared iters
+
+running (02m19.0s), 20/20 VUs, 525 complete and 0 interrupted iterations
+failure   [  52% ] 20 VUs  02m19.0s/30m0s  0525/1000 shared iters
+
+running (02m20.0s), 20/20 VUs, 530 complete and 0 interrupted iterations
+failure   [  53% ] 20 VUs  02m20.0s/30m0s  0530/1000 shared iters
+
+running (02m21.0s), 20/20 VUs, 534 complete and 0 interrupted iterations
+failure   [  53% ] 20 VUs  02m21.0s/30m0s  0534/1000 shared iters
+
+running (02m22.0s), 20/20 VUs, 535 complete and 0 interrupted iterations
+failure   [  54% ] 20 VUs  02m22.0s/30m0s  0535/1000 shared iters
+
+running (02m23.0s), 20/20 VUs, 541 complete and 0 interrupted iterations
+failure   [  54% ] 20 VUs  02m23.0s/30m0s  0541/1000 shared iters
+
+running (02m24.0s), 20/20 VUs, 545 complete and 0 interrupted iterations
+failure   [  55% ] 20 VUs  02m24.0s/30m0s  0545/1000 shared iters
+
+running (02m25.0s), 20/20 VUs, 550 complete and 0 interrupted iterations
+failure   [  55% ] 20 VUs  02m25.0s/30m0s  0550/1000 shared iters
+
+running (02m26.0s), 20/20 VUs, 552 complete and 0 interrupted iterations
+failure   [  55% ] 20 VUs  02m26.0s/30m0s  0552/1000 shared iters
+
+running (02m27.0s), 20/20 VUs, 557 complete and 0 interrupted iterations
+failure   [  56% ] 20 VUs  02m27.0s/30m0s  0557/1000 shared iters
+
+running (02m28.0s), 20/20 VUs, 561 complete and 0 interrupted iterations
+failure   [  56% ] 20 VUs  02m28.0s/30m0s  0561/1000 shared iters
+
+running (02m29.0s), 20/20 VUs, 565 complete and 0 interrupted iterations
+failure   [  56% ] 20 VUs  02m29.0s/30m0s  0565/1000 shared iters
+
+running (02m30.0s), 20/20 VUs, 569 complete and 0 interrupted iterations
+failure   [  57% ] 20 VUs  02m30.0s/30m0s  0569/1000 shared iters
+
+running (02m31.0s), 20/20 VUs, 573 complete and 0 interrupted iterations
+failure   [  57% ] 20 VUs  02m31.0s/30m0s  0573/1000 shared iters
+
+running (02m32.0s), 20/20 VUs, 578 complete and 0 interrupted iterations
+failure   [  58% ] 20 VUs  02m32.0s/30m0s  0578/1000 shared iters
+
+running (02m33.0s), 20/20 VUs, 581 complete and 0 interrupted iterations
+failure   [  58% ] 20 VUs  02m33.0s/30m0s  0581/1000 shared iters
+
+running (02m34.0s), 20/20 VUs, 584 complete and 0 interrupted iterations
+failure   [  58% ] 20 VUs  02m34.0s/30m0s  0584/1000 shared iters
+
+running (02m35.0s), 20/20 VUs, 587 complete and 0 interrupted iterations
+failure   [  59% ] 20 VUs  02m35.0s/30m0s  0587/1000 shared iters
+
+running (02m36.0s), 20/20 VUs, 593 complete and 0 interrupted iterations
+failure   [  59% ] 20 VUs  02m36.0s/30m0s  0593/1000 shared iters
+
+running (02m37.1s), 20/20 VUs, 596 complete and 0 interrupted iterations
+failure   [  60% ] 20 VUs  02m37.1s/30m0s  0596/1000 shared iters
+
+running (02m38.0s), 20/20 VUs, 598 complete and 0 interrupted iterations
+failure   [  60% ] 20 VUs  02m38.0s/30m0s  0598/1000 shared iters
+
+running (02m39.0s), 20/20 VUs, 604 complete and 0 interrupted iterations
+failure   [  60% ] 20 VUs  02m39.0s/30m0s  0604/1000 shared iters
+
+running (02m40.0s), 20/20 VUs, 607 complete and 0 interrupted iterations
+failure   [  61% ] 20 VUs  02m40.0s/30m0s  0607/1000 shared iters
+
+running (02m41.0s), 20/20 VUs, 612 complete and 0 interrupted iterations
+failure   [  61% ] 20 VUs  02m41.0s/30m0s  0612/1000 shared iters
+
+running (02m42.0s), 20/20 VUs, 616 complete and 0 interrupted iterations
+failure   [  62% ] 20 VUs  02m42.0s/30m0s  0616/1000 shared iters
+
+running (02m43.0s), 20/20 VUs, 620 complete and 0 interrupted iterations
+failure   [  62% ] 20 VUs  02m43.0s/30m0s  0620/1000 shared iters
+
+running (02m44.0s), 20/20 VUs, 623 complete and 0 interrupted iterations
+failure   [  62% ] 20 VUs  02m44.0s/30m0s  0623/1000 shared iters
+
+running (02m45.0s), 20/20 VUs, 629 complete and 0 interrupted iterations
+failure   [  63% ] 20 VUs  02m45.0s/30m0s  0629/1000 shared iters
+
+running (02m46.0s), 20/20 VUs, 629 complete and 0 interrupted iterations
+failure   [  63% ] 20 VUs  02m46.0s/30m0s  0629/1000 shared iters
+
+running (02m47.0s), 20/20 VUs, 637 complete and 0 interrupted iterations
+failure   [  64% ] 20 VUs  02m47.0s/30m0s  0637/1000 shared iters
+
+running (02m48.0s), 20/20 VUs, 640 complete and 0 interrupted iterations
+failure   [  64% ] 20 VUs  02m48.0s/30m0s  0640/1000 shared iters
+
+running (02m49.0s), 20/20 VUs, 644 complete and 0 interrupted iterations
+failure   [  64% ] 20 VUs  02m49.0s/30m0s  0644/1000 shared iters
+
+running (02m50.0s), 20/20 VUs, 648 complete and 0 interrupted iterations
+failure   [  65% ] 20 VUs  02m50.0s/30m0s  0648/1000 shared iters
+
+running (02m51.0s), 20/20 VUs, 652 complete and 0 interrupted iterations
+failure   [  65% ] 20 VUs  02m51.0s/30m0s  0652/1000 shared iters
+
+running (02m52.0s), 20/20 VUs, 657 complete and 0 interrupted iterations
+failure   [  66% ] 20 VUs  02m52.0s/30m0s  0657/1000 shared iters
+
+running (02m53.0s), 20/20 VUs, 661 complete and 0 interrupted iterations
+failure   [  66% ] 20 VUs  02m53.0s/30m0s  0661/1000 shared iters
+
+running (02m54.0s), 20/20 VUs, 664 complete and 0 interrupted iterations
+failure   [  66% ] 20 VUs  02m54.0s/30m0s  0664/1000 shared iters
+
+running (02m55.0s), 20/20 VUs, 670 complete and 0 interrupted iterations
+failure   [  67% ] 20 VUs  02m55.0s/30m0s  0670/1000 shared iters
+
+running (02m56.0s), 20/20 VUs, 671 complete and 0 interrupted iterations
+failure   [  67% ] 20 VUs  02m56.0s/30m0s  0671/1000 shared iters
+
+running (02m57.0s), 20/20 VUs, 675 complete and 0 interrupted iterations
+failure   [  68% ] 20 VUs  02m57.0s/30m0s  0675/1000 shared iters
+
+running (02m58.0s), 20/20 VUs, 681 complete and 0 interrupted iterations
+failure   [  68% ] 20 VUs  02m58.0s/30m0s  0681/1000 shared iters
+
+running (02m59.0s), 20/20 VUs, 684 complete and 0 interrupted iterations
+failure   [  68% ] 20 VUs  02m59.0s/30m0s  0684/1000 shared iters
+
+running (03m00.0s), 20/20 VUs, 687 complete and 0 interrupted iterations
+failure   [  69% ] 20 VUs  03m00.0s/30m0s  0687/1000 shared iters
+
+running (03m01.0s), 20/20 VUs, 692 complete and 0 interrupted iterations
+failure   [  69% ] 20 VUs  03m01.0s/30m0s  0692/1000 shared iters
+
+running (03m02.0s), 20/20 VUs, 693 complete and 0 interrupted iterations
+failure   [  69% ] 20 VUs  03m02.0s/30m0s  0693/1000 shared iters
+
+running (03m03.0s), 20/20 VUs, 699 complete and 0 interrupted iterations
+failure   [  70% ] 20 VUs  03m03.0s/30m0s  0699/1000 shared iters
+
+running (03m04.0s), 20/20 VUs, 704 complete and 0 interrupted iterations
+failure   [  70% ] 20 VUs  03m04.0s/30m0s  0704/1000 shared iters
+
+running (03m05.0s), 20/20 VUs, 706 complete and 0 interrupted iterations
+failure   [  71% ] 20 VUs  03m05.0s/30m0s  0706/1000 shared iters
+
+running (03m06.0s), 20/20 VUs, 711 complete and 0 interrupted iterations
+failure   [  71% ] 20 VUs  03m06.0s/30m0s  0711/1000 shared iters
+
+running (03m07.0s), 20/20 VUs, 713 complete and 0 interrupted iterations
+failure   [  71% ] 20 VUs  03m07.0s/30m0s  0713/1000 shared iters
+
+running (03m08.0s), 20/20 VUs, 714 complete and 0 interrupted iterations
+failure   [  71% ] 20 VUs  03m08.0s/30m0s  0714/1000 shared iters
+
+running (03m09.1s), 20/20 VUs, 717 complete and 0 interrupted iterations
+failure   [  72% ] 20 VUs  03m09.1s/30m0s  0717/1000 shared iters
+
+running (03m10.0s), 20/20 VUs, 717 complete and 0 interrupted iterations
+failure   [  72% ] 20 VUs  03m10.0s/30m0s  0717/1000 shared iters
+
+running (03m11.0s), 20/20 VUs, 718 complete and 0 interrupted iterations
+failure   [  72% ] 20 VUs  03m11.0s/30m0s  0718/1000 shared iters
+
+running (03m12.1s), 20/20 VUs, 725 complete and 0 interrupted iterations
+failure   [  72% ] 20 VUs  03m12.1s/30m0s  0725/1000 shared iters
+
+running (03m13.0s), 20/20 VUs, 730 complete and 0 interrupted iterations
+failure   [  73% ] 20 VUs  03m13.0s/30m0s  0730/1000 shared iters
+
+running (03m14.0s), 20/20 VUs, 734 complete and 0 interrupted iterations
+failure   [  73% ] 20 VUs  03m14.0s/30m0s  0734/1000 shared iters
+
+running (03m15.0s), 20/20 VUs, 735 complete and 0 interrupted iterations
+failure   [  74% ] 20 VUs  03m15.0s/30m0s  0735/1000 shared iters
+
+running (03m16.0s), 20/20 VUs, 738 complete and 0 interrupted iterations
+failure   [  74% ] 20 VUs  03m16.0s/30m0s  0738/1000 shared iters
+
+running (03m17.0s), 20/20 VUs, 742 complete and 0 interrupted iterations
+failure   [  74% ] 20 VUs  03m17.0s/30m0s  0742/1000 shared iters
+
+running (03m18.1s), 20/20 VUs, 748 complete and 0 interrupted iterations
+failure   [  75% ] 20 VUs  03m18.1s/30m0s  0748/1000 shared iters
+
+running (03m19.0s), 20/20 VUs, 750 complete and 0 interrupted iterations
+failure   [  75% ] 20 VUs  03m19.0s/30m0s  0750/1000 shared iters
+
+running (03m20.0s), 20/20 VUs, 751 complete and 0 interrupted iterations
+failure   [  75% ] 20 VUs  03m20.0s/30m0s  0751/1000 shared iters
+
+running (03m21.0s), 20/20 VUs, 753 complete and 0 interrupted iterations
+failure   [  75% ] 20 VUs  03m21.0s/30m0s  0753/1000 shared iters
+
+running (03m22.0s), 20/20 VUs, 754 complete and 0 interrupted iterations
+failure   [  75% ] 20 VUs  03m22.0s/30m0s  0754/1000 shared iters
+
+running (03m23.0s), 20/20 VUs, 760 complete and 0 interrupted iterations
+failure   [  76% ] 20 VUs  03m23.0s/30m0s  0760/1000 shared iters
+
+running (03m24.0s), 20/20 VUs, 767 complete and 0 interrupted iterations
+failure   [  77% ] 20 VUs  03m24.0s/30m0s  0767/1000 shared iters
+
+running (03m25.0s), 20/20 VUs, 768 complete and 0 interrupted iterations
+failure   [  77% ] 20 VUs  03m25.0s/30m0s  0768/1000 shared iters
+
+running (03m26.1s), 20/20 VUs, 775 complete and 0 interrupted iterations
+failure   [  78% ] 20 VUs  03m26.1s/30m0s  0775/1000 shared iters
+
+running (03m27.0s), 20/20 VUs, 777 complete and 0 interrupted iterations
+failure   [  78% ] 20 VUs  03m27.0s/30m0s  0777/1000 shared iters
+
+running (03m28.0s), 20/20 VUs, 781 complete and 0 interrupted iterations
+failure   [  78% ] 20 VUs  03m28.0s/30m0s  0781/1000 shared iters
+
+running (03m29.0s), 20/20 VUs, 786 complete and 0 interrupted iterations
+failure   [  79% ] 20 VUs  03m29.0s/30m0s  0786/1000 shared iters
+
+running (03m30.0s), 20/20 VUs, 790 complete and 0 interrupted iterations
+failure   [  79% ] 20 VUs  03m30.0s/30m0s  0790/1000 shared iters
+
+running (03m31.0s), 20/20 VUs, 792 complete and 0 interrupted iterations
+failure   [  79% ] 20 VUs  03m31.0s/30m0s  0792/1000 shared iters
+
+running (03m32.0s), 20/20 VUs, 796 complete and 0 interrupted iterations
+failure   [  80% ] 20 VUs  03m32.0s/30m0s  0796/1000 shared iters
+
+running (03m33.0s), 20/20 VUs, 800 complete and 0 interrupted iterations
+failure   [  80% ] 20 VUs  03m33.0s/30m0s  0800/1000 shared iters
+
+running (03m34.0s), 20/20 VUs, 806 complete and 0 interrupted iterations
+failure   [  81% ] 20 VUs  03m34.0s/30m0s  0806/1000 shared iters
+
+running (03m35.0s), 20/20 VUs, 807 complete and 0 interrupted iterations
+failure   [  81% ] 20 VUs  03m35.0s/30m0s  0807/1000 shared iters
+
+running (03m36.0s), 20/20 VUs, 811 complete and 0 interrupted iterations
+failure   [  81% ] 20 VUs  03m36.0s/30m0s  0811/1000 shared iters
+
+running (03m37.0s), 20/20 VUs, 815 complete and 0 interrupted iterations
+failure   [  82% ] 20 VUs  03m37.0s/30m0s  0815/1000 shared iters
+
+running (03m38.0s), 20/20 VUs, 821 complete and 0 interrupted iterations
+failure   [  82% ] 20 VUs  03m38.0s/30m0s  0821/1000 shared iters
+
+running (03m39.0s), 20/20 VUs, 825 complete and 0 interrupted iterations
+failure   [  82% ] 20 VUs  03m39.0s/30m0s  0825/1000 shared iters
+
+running (03m40.0s), 20/20 VUs, 827 complete and 0 interrupted iterations
+failure   [  83% ] 20 VUs  03m40.0s/30m0s  0827/1000 shared iters
+
+running (03m41.0s), 20/20 VUs, 831 complete and 0 interrupted iterations
+failure   [  83% ] 20 VUs  03m41.0s/30m0s  0831/1000 shared iters
+
+running (03m42.0s), 20/20 VUs, 835 complete and 0 interrupted iterations
+failure   [  84% ] 20 VUs  03m42.0s/30m0s  0835/1000 shared iters
+
+running (03m43.0s), 20/20 VUs, 838 complete and 0 interrupted iterations
+failure   [  84% ] 20 VUs  03m43.0s/30m0s  0838/1000 shared iters
+
+running (03m44.0s), 20/20 VUs, 845 complete and 0 interrupted iterations
+failure   [  84% ] 20 VUs  03m44.0s/30m0s  0845/1000 shared iters
+
+running (03m45.0s), 20/20 VUs, 848 complete and 0 interrupted iterations
+failure   [  85% ] 20 VUs  03m45.0s/30m0s  0848/1000 shared iters
+
+running (03m46.0s), 20/20 VUs, 850 complete and 0 interrupted iterations
+failure   [  85% ] 20 VUs  03m46.0s/30m0s  0850/1000 shared iters
+
+running (03m47.0s), 20/20 VUs, 854 complete and 0 interrupted iterations
+failure   [  85% ] 20 VUs  03m47.0s/30m0s  0854/1000 shared iters
+
+running (03m48.0s), 20/20 VUs, 860 complete and 0 interrupted iterations
+failure   [  86% ] 20 VUs  03m48.0s/30m0s  0860/1000 shared iters
+
+running (03m49.0s), 20/20 VUs, 863 complete and 0 interrupted iterations
+failure   [  86% ] 20 VUs  03m49.0s/30m0s  0863/1000 shared iters
+
+running (03m50.0s), 20/20 VUs, 867 complete and 0 interrupted iterations
+failure   [  87% ] 20 VUs  03m50.0s/30m0s  0867/1000 shared iters
+
+running (03m51.0s), 20/20 VUs, 868 complete and 0 interrupted iterations
+failure   [  87% ] 20 VUs  03m51.0s/30m0s  0868/1000 shared iters
+
+running (03m52.0s), 20/20 VUs, 875 complete and 0 interrupted iterations
+failure   [  88% ] 20 VUs  03m52.0s/30m0s  0875/1000 shared iters
+
+running (03m53.0s), 20/20 VUs, 880 complete and 0 interrupted iterations
+failure   [  88% ] 20 VUs  03m53.0s/30m0s  0880/1000 shared iters
+
+running (03m54.0s), 20/20 VUs, 880 complete and 0 interrupted iterations
+failure   [  88% ] 20 VUs  03m54.0s/30m0s  0880/1000 shared iters
+
+running (03m55.0s), 20/20 VUs, 888 complete and 0 interrupted iterations
+failure   [  89% ] 20 VUs  03m55.0s/30m0s  0888/1000 shared iters
+
+running (03m56.0s), 20/20 VUs, 889 complete and 0 interrupted iterations
+failure   [  89% ] 20 VUs  03m56.0s/30m0s  0889/1000 shared iters
+
+running (03m57.0s), 20/20 VUs, 893 complete and 0 interrupted iterations
+failure   [  89% ] 20 VUs  03m57.0s/30m0s  0893/1000 shared iters
+
+running (03m58.0s), 20/20 VUs, 899 complete and 0 interrupted iterations
+failure   [  90% ] 20 VUs  03m58.0s/30m0s  0899/1000 shared iters
+
+running (03m59.0s), 20/20 VUs, 902 complete and 0 interrupted iterations
+failure   [  90% ] 20 VUs  03m59.0s/30m0s  0902/1000 shared iters
+
+running (04m00.0s), 20/20 VUs, 906 complete and 0 interrupted iterations
+failure   [  91% ] 20 VUs  04m00.0s/30m0s  0906/1000 shared iters
+
+running (04m01.0s), 20/20 VUs, 910 complete and 0 interrupted iterations
+failure   [  91% ] 20 VUs  04m01.0s/30m0s  0910/1000 shared iters
+
+running (04m02.0s), 20/20 VUs, 914 complete and 0 interrupted iterations
+failure   [  91% ] 20 VUs  04m02.0s/30m0s  0914/1000 shared iters
+
+running (04m03.0s), 20/20 VUs, 918 complete and 0 interrupted iterations
+failure   [  92% ] 20 VUs  04m03.0s/30m0s  0918/1000 shared iters
+
+running (04m04.0s), 20/20 VUs, 923 complete and 0 interrupted iterations
+failure   [  92% ] 20 VUs  04m04.0s/30m0s  0923/1000 shared iters
+
+running (04m05.0s), 20/20 VUs, 925 complete and 0 interrupted iterations
+failure   [  92% ] 20 VUs  04m05.0s/30m0s  0925/1000 shared iters
+
+running (04m06.0s), 20/20 VUs, 930 complete and 0 interrupted iterations
+failure   [  93% ] 20 VUs  04m06.0s/30m0s  0930/1000 shared iters
+
+running (04m07.0s), 20/20 VUs, 932 complete and 0 interrupted iterations
+failure   [  93% ] 20 VUs  04m07.0s/30m0s  0932/1000 shared iters
+
+running (04m08.0s), 20/20 VUs, 937 complete and 0 interrupted iterations
+failure   [  94% ] 20 VUs  04m08.0s/30m0s  0937/1000 shared iters
+
+running (04m09.0s), 20/20 VUs, 942 complete and 0 interrupted iterations
+failure   [  94% ] 20 VUs  04m09.0s/30m0s  0942/1000 shared iters
+
+running (04m10.0s), 20/20 VUs, 945 complete and 0 interrupted iterations
+failure   [  94% ] 20 VUs  04m10.0s/30m0s  0945/1000 shared iters
+
+running (04m11.0s), 20/20 VUs, 949 complete and 0 interrupted iterations
+failure   [  95% ] 20 VUs  04m11.0s/30m0s  0949/1000 shared iters
+
+running (04m12.0s), 20/20 VUs, 953 complete and 0 interrupted iterations
+failure   [  95% ] 20 VUs  04m12.0s/30m0s  0953/1000 shared iters
+
+running (04m13.0s), 20/20 VUs, 957 complete and 0 interrupted iterations
+failure   [  96% ] 20 VUs  04m13.0s/30m0s  0957/1000 shared iters
+
+running (04m14.0s), 20/20 VUs, 961 complete and 0 interrupted iterations
+failure   [  96% ] 20 VUs  04m14.0s/30m0s  0961/1000 shared iters
+
+running (04m15.0s), 20/20 VUs, 962 complete and 0 interrupted iterations
+failure   [  96% ] 20 VUs  04m15.0s/30m0s  0962/1000 shared iters
+
+running (04m16.0s), 20/20 VUs, 970 complete and 0 interrupted iterations
+failure   [  97% ] 20 VUs  04m16.0s/30m0s  0970/1000 shared iters
+
+running (04m17.0s), 20/20 VUs, 975 complete and 0 interrupted iterations
+failure   [  98% ] 20 VUs  04m17.0s/30m0s  0975/1000 shared iters
+
+running (04m18.0s), 20/20 VUs, 977 complete and 0 interrupted iterations
+failure   [  98% ] 20 VUs  04m18.0s/30m0s  0977/1000 shared iters
+
+running (04m19.0s), 20/20 VUs, 980 complete and 0 interrupted iterations
+failure   [  98% ] 20 VUs  04m19.0s/30m0s  0980/1000 shared iters
+
+running (04m20.0s), 13/20 VUs, 987 complete and 0 interrupted iterations
+failure   [  99% ] 20 VUs  04m20.0s/30m0s  0987/1000 shared iters
+
+running (04m21.0s), 10/20 VUs, 990 complete and 0 interrupted iterations
+failure   [  99% ] 20 VUs  04m21.0s/30m0s  0990/1000 shared iters
+
+running (04m22.0s), 06/20 VUs, 994 complete and 0 interrupted iterations
+failure   [  99% ] 20 VUs  04m22.0s/30m0s  0994/1000 shared iters
+
+running (04m23.0s), 03/20 VUs, 997 complete and 0 interrupted iterations
+failure   [ 100% ] 20 VUs  04m23.0s/30m0s  0997/1000 shared iters
+Failure experiment raw summary saved; validation pending.
+
+running (04m23.7s), 00/20 VUs, 1000 complete and 0 interrupted iterations
+failure ✓ [ 100% ] 20 VUs  04m23.7s/30m0s  1000/1000 shared iters

@@ -1,4 +1,5 @@
 node_modules/
+.local-tools/
 .env
 .env.*
 !.env.example

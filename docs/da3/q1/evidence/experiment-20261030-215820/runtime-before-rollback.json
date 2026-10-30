@@ -1,0 +1,176 @@
+{
+  "stack": [
+    {
+      "id": "8674614b9619ad7703366f7119a38cdf52681f2ba794b7cf6016ca5c21462705",
+      "name": "/evolve-frontend-1",
+      "image": "sha256:046f9aac7098d53939f4ce1f50a0c59e69100c7c0bf88938107112aa29bef8d0",
+      "project": "evolve",
+      "service": "frontend",
+      "running": true,
+      "health": null,
+      "networks": {
+        "evolve_default": {
+          "Aliases": [
+            "evolve-frontend-1",
+            "frontend"
+          ],
+          "DNSNames": [
+            "evolve-frontend-1",
+            "frontend",
+            "8674614b9619"
+          ],
+          "DriverOpts": null,
+          "EndpointID": "351c37ddc4d56427660a7f181644ae6f9881c564c5e4103fead2bb62e89bab21",
+          "Gateway": "172.18.0.1",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "GwPriority": 0,
+          "IPAMConfig": null,
+          "IPAddress": "172.18.0.5",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "Links": null,
+          "MacAddress": "de:7c:28:82:e5:73",
+          "NetworkID": "c4c4ef3a25b20490571ca946098e1824e7a99beab1c80d2884ee63ffc36fe1e1"
+        }
+      },
+      "mounts": [
+        {
+          "Destination": "/etc/nginx/conf.d/default.conf",
+          "Mode": "ro",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "C:\\Users\\Arushi Grover\\OneDrive\\EVolve\\benchmarks\\nginx.failover-after.conf",
+          "Type": "bind"
+        }
+      ],
+      "ports": {
+        "80/tcp": [
+          {
+            "HostIp": "",
+            "HostPort": "5173"
+          }
+        ]
+      }
+    },
+    {
+      "id": "d77cdc623ca09daf160b380fbed9912e96577d8338effd1e6336f061ff35ddef",
+      "name": "/evolve-backend1-1",
+      "image": "sha256:0fd2b2d4ca403d6756563e75a1bb995f7972420bb6694e6d59062fa8b0356d96",
+      "project": "evolve",
+      "service": "backend1",
+      "running": true,
+      "health": "healthy",
+      "networks": {
+        "evolve_default": {
+          "Aliases": [
+            "evolve-backend1-1",
+            "backend1"
+          ],
+          "DNSNames": [
+            "evolve-backend1-1",
+            "backend1",
+            "d77cdc623ca0"
+          ],
+          "DriverOpts": null,
+          "EndpointID": "44e18a8630eb6b805767ead7d00e54554f84615b3a5d0fb2f349bc26b6a44689",
+          "Gateway": "172.18.0.1",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "GwPriority": 0,
+          "IPAMConfig": null,
+          "IPAddress": "172.18.0.3",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "Links": null,
+          "MacAddress": "46:db:c8:f4:c3:95",
+          "NetworkID": "c4c4ef3a25b20490571ca946098e1824e7a99beab1c80d2884ee63ffc36fe1e1"
+        }
+      },
+      "mounts": [],
+      "ports": {}
+    },
+    {
+      "id": "f47b0a5c74b08f7bede42e196bdf22a9c1280e46c1631b88d47d66f19cfe07b8",
+      "name": "/evolve-backend2-1",
+      "image": "sha256:0fd2b2d4ca403d6756563e75a1bb995f7972420bb6694e6d59062fa8b0356d96",
+      "project": "evolve",
+      "service": "backend2",
+      "running": true,
+      "health": "healthy",
+      "networks": {
+        "evolve_default": {
+          "Aliases": [
+            "evolve-backend2-1",
+            "backend2"
+          ],
+          "DNSNames": [
+            "evolve-backend2-1",
+            "backend2",
+            "f47b0a5c74b0"
+          ],
+          "DriverOpts": null,
+          "EndpointID": "c046b61e32ab0ef2e3c2e34611654fecc17533a895a8b9ff6514efa9cd2838f1",
+          "Gateway": "172.18.0.1",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "GwPriority": 0,
+          "IPAMConfig": null,
+          "IPAddress": "172.18.0.4",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "Links": null,
+          "MacAddress": "a2:40:4b:3f:19:3c",
+          "NetworkID": "c4c4ef3a25b20490571ca946098e1824e7a99beab1c80d2884ee63ffc36fe1e1"
+        }
+      },
+      "mounts": [],
+      "ports": {}
+    },
+    {
+      "id": "ba267dcfe5492be374b8107d4c22ad430f7142d7b6971ec360871766f8c92aee",
+      "name": "/evolve-backend3-1",
+      "image": "sha256:0fd2b2d4ca403d6756563e75a1bb995f7972420bb6694e6d59062fa8b0356d96",
+      "project": "evolve",
+      "service": "backend3",
+      "running": true,
+      "health": "healthy",
+      "networks": {
+        "evolve_default": {
+          "Aliases": [
+            "evolve-backend3-1",
+            "backend3"
+          ],
+          "DNSNames": [
+            "evolve-backend3-1",
+            "backend3",
+            "ba267dcfe549"
+          ],
+          "DriverOpts": null,
+          "EndpointID": "054ac736458ba707f6be8b596db3ed363d29e61445ee851f777381fc0e43fcf6",
+          "Gateway": "172.18.0.1",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "GwPriority": 0,
+          "IPAMConfig": null,
+          "IPAddress": "172.18.0.2",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "Links": null,
+          "MacAddress": "a2:0a:13:88:de:8c",
+          "NetworkID": "c4c4ef3a25b20490571ca946098e1824e7a99beab1c80d2884ee63ffc36fe1e1"
+        }
+      },
+      "mounts": [],
+      "ports": {}
+    }
+  ],
+  "baseline": [],
+  "portFree": null,
+  "runningServices": [
+    "frontend",
+    "backend2",
+    "backend1",
+    "backend3"
+  ]
+}

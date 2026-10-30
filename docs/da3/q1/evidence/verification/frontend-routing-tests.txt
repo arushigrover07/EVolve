@@ -1,0 +1,14 @@
+✔ frontend API routing: Compose uses the browser origin (1.9798ms)
+✔ frontend API routing: Compose stays same-origin on a remote Docker host (0.7059ms)
+✔ frontend API routing: local development fallback is unchanged (0.949ms)
+✔ frontend API routing: empty deployed configuration retains the Render fallback (2.5323ms)
+✔ frontend API routing: unset deployed configuration retains the Render fallback (1.1305ms)
+✔ frontend API routing: explicit deployed API override is preserved (1.1129ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 199.5998

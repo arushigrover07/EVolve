@@ -1,0 +1,5 @@
+time="2026-10-30T22:12:39+05:30" level=warning msg="Found orphan containers (evolve-backend-1) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container evolve-frontend-1 Recreate 
+ Container evolve-frontend-1 Recreated 
+ Container evolve-frontend-1 Starting 
+ Container evolve-frontend-1 Started 

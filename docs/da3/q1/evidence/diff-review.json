@@ -1,0 +1,13 @@
+{
+  "branch": "da3",
+  "trackedDiffLines": 1384,
+  "credentialPatternPresent": false,
+  "missingDocumentationLinks": [],
+  "preexistingChangesPreserved": true,
+  "newFilesListedIn": "changed-files.json",
+  "scope": "Tracked diff plus changed/new source and evidence; .env files never opened",
+  "utf8Normalized": [
+    "docs\\da3\\q1\\resume-runtime.md",
+    "docs\\da3\\q1\\screenshots-and-demo.md"
+  ]
+}

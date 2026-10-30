@@ -1,0 +1,21 @@
+[
+  {
+    "startedUtc": "2026-10-30T16:00:06.2167494+00:00",
+    "exitCode": 0,
+    "log": "benchmark-tests-final.txt",
+    "command": "node --test benchmarks/prepare.test.cjs benchmarks/failure.test.cjs",
+    "finishedUtc": "2026-10-30T16:00:06.6128870+00:00"
+  },
+  {
+    "command": "PowerShell Parser.ParseFile all scripts and preflight tests",
+    "exitCode": 0
+  },
+  {
+    "command": "node --check benchmarks/*.mjs and *.cjs",
+    "exitCode": 0
+  },
+  {
+    "command": "git -c core.fsmonitor=false diff --check",
+    "exitCode": 0
+  }
+]

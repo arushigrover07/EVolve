@@ -1,6 +1,13 @@
-const db = require("../db");
+const { logError } = require("../logging");
+const { positiveInteger } = require("../dbConfig");
 
-let telemetryInterval = null;
+function createTelemetryService({ db, logger = console, random = Math.random, intervalMs = 10000,
+  schedule = setTimeout, cancel = clearTimeout }) {
+  positiveInteger(intervalMs, 10000, "telemetry interval");
+  let timer = null;
+  let running = false;
+  let generation = 0;
+  let inFlight = null;
 
 /**
  * SIMULATED REAL-TIME CHARGER MONITORING SERVICE
@@ -18,7 +25,7 @@ let telemetryInterval = null;
  * 2. Calculates station-level metrics for all active stations.
  * 3. Records new metrics entries in the PostgreSQL metrics table.
  */
-async function runTelemetryCycle() {
+async function executeCycle() {
   try {
     // 1. SIMULATE CHARGER ACTIVITY:
     // Select chargers that are currently AVAILABLE or CHARGING
@@ -30,7 +37,7 @@ async function runTelemetryCycle() {
 
     if (chargers.length > 0) {
       // Pick one charger randomly to toggle status (AVAILABLE <-> CHARGING)
-      const randomIndex = Math.floor(Math.random() * chargers.length);
+      const randomIndex = Math.floor(random() * chargers.length);
       const selectedCharger = chargers[randomIndex];
 
       const newStatus = selectedCharger.status === "AVAILABLE" ? "CHARGING" : "AVAILABLE";
@@ -77,32 +84,33 @@ async function runTelemetryCycle() {
       );
     }
 
-    console.log("[SIMULATED TELEMETRY] Telemetry update cycle completed.");
+    logger.log("[SIMULATED TELEMETRY] Telemetry update cycle completed.");
   } catch (error) {
-    console.error("[SIMULATED TELEMETRY ERROR] Failed to complete telemetry update:", error.message);
+    logError(logger, "Simulated telemetry cycle failed", error);
   }
 }
 
-/**
- * Starts the telemetry service loop using setInterval (runs every 10 seconds).
- * Prevents creation of duplicate intervals.
- */
-function startTelemetryService() {
-  if (telemetryInterval) {
-    console.log("[SIMULATED TELEMETRY] Service is already running.");
-    return;
-  }
-
-  console.log("[SIMULATED TELEMETRY] Starting real-time charger monitoring simulation (10s interval)...");
-
-  // Run the first cycle immediately
-  runTelemetryCycle();
-
-  // Run periodically every 10 seconds (10,000 ms)
-  telemetryInterval = setInterval(runTelemetryCycle, 10000);
+// Manual invocations and scheduled invocations share the same in-flight cycle.
+function runTelemetryCycle() {
+  if (!inFlight) inFlight = executeCycle().finally(() => { inFlight = null; });
+  return inFlight;
 }
-
-module.exports = {
-  startTelemetryService,
-  runTelemetryCycle
-};
+async function tick(currentGeneration) {
+  await runTelemetryCycle();
+  if (running && generation === currentGeneration) timer = schedule(() => { void tick(currentGeneration); }, intervalMs);
+}
+function start() {
+  if (running) return;
+  running = true;
+  void tick(++generation);
+}
+async function stop() {
+  running = false;
+  generation++;
+  if (timer !== null) cancel(timer);
+  timer = null;
+  if (inFlight) await inFlight;
+}
+return { start, stop, runTelemetryCycle };
+}
+module.exports = { createTelemetryService };
