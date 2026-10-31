@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import StationCard from './StationCard';
-import { API_BASE_URL } from '../config';
+import { getStations } from '../api';
 
 function StationsSection({ onBookClick }) {
   const [stations, setStations] = useState([]);
@@ -11,24 +11,28 @@ function StationsSection({ onBookClick }) {
   const [activeFilter, setActiveFilter] = useState('ALL');
 
   useEffect(() => {
-    async function fetchStations() {
+    let isMounted = true;
+    async function fetchStationsList() {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`${API_BASE_URL}/api/stations`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch stations (HTTP ${response.status})`);
+        const data = await getStations();
+        if (isMounted) {
+          setStations(Array.isArray(data) ? data : []);
         }
-        const data = await response.json();
-        setStations(data);
       } catch (err) {
-        setError(err.message || 'Unable to connect to backend server');
+        if (isMounted) {
+          setError(err.message || 'Unable to connect to backend server');
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
 
-    fetchStations();
+    fetchStationsList();
+    return () => { isMounted = false; };
   }, []);
 
   // Filter logic
@@ -142,4 +146,3 @@ function StationsSection({ onBookClick }) {
 }
 
 export default StationsSection;
-

@@ -44,8 +44,26 @@ CREATE TABLE IF NOT EXISTS charging_sessions (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 5. Users Table
+-- Registered operators and drivers with salted bcrypt password hashes (12 salt rounds) and optional TOTP MFA
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  role VARCHAR(50) DEFAULT 'user',
+  totp_secret VARCHAR(64),
+  mfa_enabled BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Migration Queries for User TOTP MFA (DA3 Q2b)
+ALTER TABLE users
+ADD COLUMN IF NOT EXISTS totp_secret VARCHAR(64),
+ADD COLUMN IF NOT EXISTS mfa_enabled BOOLEAN DEFAULT FALSE;
+
 -- Migration Queries for OpenChargeMap (OCM) Data Integration
-ALTER TABLE stations 
+ALTER TABLE stations
 ADD COLUMN IF NOT EXISTS latitude NUMERIC(10, 7),
 ADD COLUMN IF NOT EXISTS longitude NUMERIC(10, 7),
 ADD COLUMN IF NOT EXISTS ocm_id INT UNIQUE;
@@ -54,6 +72,6 @@ ALTER TABLE chargers
 ADD COLUMN IF NOT EXISTS ocm_connection_id INT,
 ADD COLUMN IF NOT EXISTS ocm_port_index INT DEFAULT 1;
 
-CREATE UNIQUE INDEX IF NOT EXISTS chargers_station_ocm_conn_idx 
-ON chargers (station_id, ocm_connection_id, ocm_port_index) 
+CREATE UNIQUE INDEX IF NOT EXISTS chargers_station_ocm_conn_idx
+ON chargers (station_id, ocm_connection_id, ocm_port_index)
 WHERE ocm_connection_id IS NOT NULL;

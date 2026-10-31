@@ -1,39 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import { API_BASE_URL } from '../config';
+import { getBookings, deleteBooking } from '../api';
 
-function BookingsSection({ onBookNewClick }) {
+function BookingsSection({ currentUser, onBookNewClick }) {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [cancellingId, setCancellingId] = useState(null);
+  const [actionError, setActionError] = useState(null);
+
+  const fetchBookingsList = async (isMounted = true) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await getBookings();
+      if (isMounted && Array.isArray(data)) {
+        setBookings(data);
+      }
+    } catch (err) {
+      if (isMounted) {
+        setError(err.message || 'Unable to connect to backend server');
+      }
+    } finally {
+      if (isMounted) {
+        setLoading(false);
+      }
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
-    async function fetchBookings() {
-      try {
-        setLoading(true);
-        setError(null);
-        const response = await fetch(`${API_BASE_URL}/api/bookings`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch bookings (HTTP ${response.status})`);
-        }
-        const data = await response.json();
-        if (isMounted && Array.isArray(data)) {
-          setBookings(data);
-        }
-      } catch (err) {
-        if (isMounted) {
-          setError(err.message || 'Unable to connect to backend server');
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    }
-
-    fetchBookings();
+    fetchBookingsList(isMounted);
     return () => { isMounted = false; };
   }, []);
+
+  const handleCancelBooking = async (bookingId) => {
+    setActionError(null);
+    setCancellingId(bookingId);
+    try {
+      await deleteBooking(bookingId);
+      // Remove cancelled booking from list
+      setBookings((prev) => prev.filter((b) => b.id !== bookingId));
+    } catch (err) {
+      setActionError(err.message || 'Failed to cancel reservation');
+    } finally {
+      setCancellingId(null);
+    }
+  };
 
   const formatDate = (isoString) => {
     if (!isoString) return 'N/A';
@@ -61,9 +73,15 @@ function BookingsSection({ onBookNewClick }) {
             <h2 className="section-title">My Bookings & Reservations</h2>
           </div>
           <p className="section-description">
-            View active slot reservations and historical charging session records.
+            View active slot reservations and manage charging sessions.
           </p>
         </div>
+
+        {actionError && (
+          <div className="stations-error" style={{ marginBottom: '16px', padding: '12px 16px' }}>
+            <p style={{ margin: 0, color: 'var(--status-danger-text)', fontSize: '0.88rem' }}>⚠️ {actionError}</p>
+          </div>
+        )}
 
         {/* Loading State */}
         {loading && (
@@ -130,13 +148,29 @@ function BookingsSection({ onBookNewClick }) {
                   </div>
                 </div>
 
-                <div className="booking-card-footer">
-                  <span className="booking-user-chip">Demo User #1</span>
-                  {onBookNewClick && (
-                    <button className="btn-secondary" onClick={onBookNewClick}>
-                      Book Another Slot
-                    </button>
-                  )}
+                <div className="booking-card-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span className="booking-user-chip">
+                    {currentUser && currentUser.id === booking.user_id
+                      ? `👤 ${currentUser.name}`
+                      : `User #${booking.user_id}`}
+                  </span>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    {booking.status === 'BOOKED' && (
+                      <button
+                        className="btn-secondary"
+                        style={{ color: 'var(--status-danger-text)', borderColor: 'var(--status-danger-text)' }}
+                        onClick={() => handleCancelBooking(booking.id)}
+                        disabled={cancellingId === booking.id}
+                      >
+                        {cancellingId === booking.id ? 'Cancelling...' : 'Cancel Slot'}
+                      </button>
+                    )}
+                    {onBookNewClick && (
+                      <button className="btn-secondary" onClick={onBookNewClick}>
+                        Book Another
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}

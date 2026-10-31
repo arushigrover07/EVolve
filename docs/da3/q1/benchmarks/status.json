@@ -1,17 +1,24 @@
 {
   "milestone": "Q1",
   "date": "2026-10-30",
-  "overallStatus": "EXPERIMENTS_COMPLETED_REJECTED_ZERO_FAILURE",
+  "overallStatus": "CORRECTIVE_EXPERIMENTS_COMPLETED",
+  "experimentDirectory": "docs/da3/q1/evidence/experiment-20261030-231913/",
+  "historicalExperimentDirectory": "docs/da3/q1/evidence/experiment-20261030-215820/",
   "q1a": {
     "distributionRequests": 30,
     "successfulIdentityRequests": 30,
     "distinctInstances": 3,
+    "identityCounts": [
+      { "backendInstanceId": "c16ee63e-8757-43cd-97ed-cb7d6ab9a4e7", "count": 14 },
+      { "backendInstanceId": "ad87278a-0afc-4b62-8104-3567336a72d7", "count": 9 },
+      { "backendInstanceId": "b82ec201-e056-490c-bb5a-d989bd1b4fac", "count": 7 }
+    ],
     "stationDistributionRequests": 12,
     "successfulStationRequests": 12,
     "stationCounts": [
-      { "backendInstanceId": "84340d27-c6eb-41b6-9b92-6f9e52e32916", "count": 5 },
-      { "backendInstanceId": "8bb2c825-4a13-4492-b391-5f44329d8f9f", "count": 3 },
-      { "backendInstanceId": "c3ed4594-8a4e-4b71-9a8b-167b0a096489", "count": 4 }
+      { "backendInstanceId": "b82ec201-e056-490c-bb5a-d989bd1b4fac", "count": 4 },
+      { "backendInstanceId": "c16ee63e-8757-43cd-97ed-cb7d6ab9a4e7", "count": 4 },
+      { "backendInstanceId": "ad87278a-0afc-4b62-8104-3567336a72d7", "count": 4 }
     ],
     "stationDataSha256": "8dc1a4fd5ba2bcef7bfac5bac7c6e8979952d555fdea0ff14c2c8e3e15873dc2",
     "stationApiStatus": 200,
@@ -19,68 +26,79 @@
   },
   "q1b": {
     "status": "COMPLETED_REJECTED",
-    "rejectionReason": "Non-zero HTTP failure rate violated threshold rate==0 (processExitCode 99)",
+    "rejectionReason": "Three run experienced 7 failed requests violating custom zero-failure threshold rate==0 (processExitCode -1); One run was accepted with 0 failures",
     "one": {
       "requests": 1000,
-      "successful": 924,
-      "failed": 76,
-      "rps": 3.3910979261516143,
-      "averageResponseTimeMs": 5833.883446199997,
-      "exitCode": 99,
-      "status": "rejected"
+      "successful": 1000,
+      "failed": 0,
+      "rps": 3.3181489550234127,
+      "averageResponseTimeMs": 5980.356849200002,
+      "medianResponseTimeMs": 5747.9679,
+      "p95ResponseTimeMs": 7784.838224999999,
+      "minResponseTimeMs": 1444.3123,
+      "maxResponseTimeMs": 14471.4521,
+      "durationSeconds": 301.3728478,
+      "exitCode": 0,
+      "status": "accepted"
     },
     "three": {
       "requests": 1000,
-      "successful": 967,
-      "failed": 33,
-      "rps": 3.710355278224061,
-      "averageResponseTimeMs": 5328.449515399999,
-      "exitCode": 99,
+      "successful": 993,
+      "failed": 7,
+      "rps": 3.8079410014924515,
+      "averageResponseTimeMs": 5184.632206300006,
+      "medianResponseTimeMs": 4997.53875,
+      "p95ResponseTimeMs": 8761.072719999998,
+      "minResponseTimeMs": 638.8992,
+      "maxResponseTimeMs": 14762.939,
+      "durationSeconds": 262.60911070000003,
+      "exitCode": -1,
       "status": "rejected"
     },
-    "rpsImprovementPercent": 9.414571990425717,
-    "averageResponseTimeReductionPercent": 8.663764837894674,
+    "rpsImprovementPercent": 14.761002387416417,
+    "averageResponseTimeReductionPercent": 13.305638157803926,
+    "medianResponseTimeReductionPercent": 13.055555686036453,
     "zeroFailuresDemonstrated": false
   },
   "q1c": {
     "status": "COMPLETED",
     "before": {
       "clientRequests": 1000,
-      "successfulRequests": 907,
-      "failedRequests": 93,
+      "successfulRequests": 931,
+      "failedRequests": 69,
       "transportErrors": 0,
       "timeouts": 0,
-      "httpNon2xx": 93,
+      "httpNon2xx": 69,
       "statusCounts": {
-        "200": 907,
-        "500": 12,
-        "502": 68,
+        "200": 931,
+        "500": 1,
+        "502": 55,
         "504": 13
       },
-      "failureRatePercent": 9.3
+      "failureRatePercent": 6.9
     },
     "after": {
       "clientRequests": 1000,
-      "successfulRequests": 995,
-      "failedRequests": 5,
+      "successfulRequests": 1000,
+      "failedRequests": 0,
       "transportErrors": 0,
       "timeouts": 0,
-      "httpNon2xx": 5,
+      "httpNon2xx": 0,
       "statusCounts": {
-        "200": 995,
-        "500": 5
+        "200": 1000
       },
-      "failureRatePercent": 0.5
+      "failureRatePercent": 0.0
     },
-    "failureReductionPercent": 94.6236559139785,
+    "failureReductionPercent": 100.0,
     "gatewayErrorsEliminated": true,
-    "zeroFailuresDemonstrated": false,
+    "zeroFailuresDemonstrated": true,
     "recoverySucceeded": true
   },
   "q1d": {
     "status": "REPORT_READY_PROPOSED_EDGE_MARKED",
     "svg": "architecture/evolve-q1.svg",
-    "png": "architecture/evolve-q1.png"
+    "png": "architecture/evolve-q1.png",
+    "mmd": "architecture/evolve-q1.mmd"
   },
   "runtimeRestored": true,
   "originalImagesRestored": true,

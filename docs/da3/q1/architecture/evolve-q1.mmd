@@ -1,22 +1,25 @@
 flowchart LR
   subgraph LOCAL[Actual local Docker experiment - evolve_default]
-    K[Windows host: k6 v1.8.2 + PowerShell probes - API runs blocked]
+    K[Windows host: k6 v1.8.2 + PowerShell - 1000-req benchmarks & failover]
     F[frontend: React + Nginx - host 5173 to container 80]
     B1[backend1:5000 - pool 5]
     B2[backend2:5000 - pool 5]
     B3[backend3:5000 - pool 5]
-    K -->|local HTTP; identity probes observed| F
-    F --> B1 & B2 & B3
+    P1[evolve-q1b-baseline: dedicated proxy on 5174 to backend1]
+    K -->|local HTTP requests| F
+    K -.->|isolated baseline load| P1
+    P1 -.-> B1
+    F -->|round-robin /api/* with failover retry| B1 & B2 & B3
   end
-  N[(Existing Neon PostgreSQL - TLS - read connection ETIMEDOUT)]
-  B1 & B2 & B3 -.->|configured connection currently blocked| N
+  N[(Existing Neon PostgreSQL - TLS - AWS us-east-2)]
+  B1 & B2 & B3 -->|TLS pool connections - PG_CONNECT_TIMEOUT_MS: 15s| N
   subgraph HOSTED[Existing Assignment 1 hosting - project references only]
     RF[Render frontend - HTTPS]
-    RB[Render backend - HTTPS; process port not inspected]
+    RB[Render backend - HTTPS]
     RF --> RB
   end
-  RB -.->|project architecture; not queried| N
+  RB -.->|project architecture reference| N
   E[PROPOSED EV-site edge gateway - short TTL availability cache and telemetry buffer]
-  E -.->|future HTTPS sync; central booking authority| RB
+  E -.->|proposed HTTPS sync; central booking authority| RB
   classDef proposed fill:#f3e8ff,stroke:#9333ea,color:#581c87
   class E proposed

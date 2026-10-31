@@ -1,0 +1,24 @@
+﻿{
+    "requests":  30,
+    "successes":  30,
+    "distinctBackendInstances":  3,
+    "counts":  [
+                   {
+                       "backendInstanceId":  "c16ee63e-8757-43cd-97ed-cb7d6ab9a4e7",
+                       "Count":  14
+                   },
+                   {
+                       "backendInstanceId":  "ad87278a-0afc-4b62-8104-3567336a72d7",
+                       "Count":  9
+                   },
+                   {
+                       "backendInstanceId":  "b82ec201-e056-490c-bb5a-d989bd1b4fac",
+                       "Count":  7
+                   }
+               ],
+    "endpoint":  "/api/instance",
+    "observedDataHashes":  [
+
+                           ],
+    "note":  "Identity endpoint only; no database query."
+}

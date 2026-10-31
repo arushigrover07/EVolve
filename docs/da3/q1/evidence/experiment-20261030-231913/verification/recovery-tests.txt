@@ -1,0 +1,1 @@
+﻿PASS: 76 synthetic preflight, recovery and mocked cleanup checks. No real Docker or HTTP calls made.

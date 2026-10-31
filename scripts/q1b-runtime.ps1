@@ -1,7 +1,8 @@
 # Shared read-only runtime checks. Dot-sourcing defines functions only.
 function Invoke-Q1bDocker {
     param([string[]]$Arguments)
-    $output = & docker @Arguments
+    $escaped = @($Arguments | ForEach-Object { if ($_ -match '\{\{') { $_ -replace '"', '\"' } else { $_ } })
+    $output = & docker @escaped
     if ($LASTEXITCODE -ne 0) { throw 'Read-only Docker inspection failed.' }
     return $output
 }

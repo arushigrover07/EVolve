@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { API_BASE_URL } from '../config';
+import { getChargers, createBooking, startSession, completeSession } from '../api';
 
-function BookingModal({ station, onClose, onBookingSuccess }) {
+function BookingModal({ station, currentUser, onClose, onBookingSuccess }) {
   const [chargersList, setChargersList] = useState(
     station && station.chargers && station.chargers.length > 0 ? station.chargers : []
   );
@@ -13,15 +13,12 @@ function BookingModal({ station, onClose, onBookingSuccess }) {
       if (!station || !station.id) return;
       try {
         setLoadingChargers(true);
-        const res = await fetch(`${API_BASE_URL}/api/chargers?station_id=${station.id}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (isMounted && Array.isArray(data) && data.length > 0) {
-            setChargersList(data);
-          }
+        const data = await getChargers(station.id);
+        if (isMounted && Array.isArray(data) && data.length > 0) {
+          setChargersList(data);
         }
       } catch (err) {
-        // Fallback gracefully
+        // Fallback gracefully to default plugs
       } finally {
         if (isMounted) {
           setLoadingChargers(false);
@@ -78,25 +75,15 @@ function BookingModal({ station, onClose, onBookingSuccess }) {
       const startTime = now.toISOString();
       const endTime = new Date(now.getTime() + duration * 60 * 1000).toISOString();
 
-      const response = await fetch(`${API_BASE_URL}/api/bookings`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: 1, // Demo user ID
-          charger_id: Number(selectedChargerId),
-          start_time: startTime,
-          end_time: endTime,
-          status: 'BOOKED'
-        })
-      });
+      const bookingPayload = {
+        user_id: currentUser?.id || 1,
+        charger_id: Number(selectedChargerId),
+        start_time: startTime,
+        end_time: endTime,
+        status: 'BOOKED'
+      };
 
-      const data = await response.json();
-
-      if (response.status === 409) {
-        throw new Error(data.message || 'Charger is already booked for the selected time slot.');
-      } else if (!response.ok) {
-        throw new Error(data.message || 'Booking does not exist or failed to create.');
-      }
+      const data = await createBooking(bookingPayload);
 
       setCreatedBooking(data);
       setStep('BOOKED');
@@ -121,19 +108,7 @@ function BookingModal({ station, onClose, onBookingSuccess }) {
       setSubmitting(true);
       setError(null);
 
-      const response = await fetch(`${API_BASE_URL}/api/sessions/start`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          booking_id: createdBooking.id
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Session cannot be started.');
-      }
+      const data = await startSession(createdBooking.id);
 
       setActiveSession(data);
       setStep('CHARGING');
@@ -166,19 +141,7 @@ function BookingModal({ station, onClose, onBookingSuccess }) {
       setSubmitting(true);
       setError(null);
 
-      const response = await fetch(`${API_BASE_URL}/api/sessions/${activeSession.id}/complete`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          energy_used_kwh: energyNum
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Session cannot be completed.');
-      }
+      const data = await completeSession(activeSession.id, energyNum);
 
       setCompletedSession(data);
       setStep('COMPLETED');

@@ -1,7 +1,8 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { once } = require("node:events");
-const { createApp } = require("../app");
+const { createApp, signToken } = require("../app");
+const { TOKEN_SECRET } = require("../auth");
 
 const quiet = { log() {}, error() {} };
 function database(t, steps = []) {
@@ -26,10 +27,10 @@ async function client(t, db, options = {}) {
   const server = app.listen(0, "127.0.0.1");
   await once(server, "listening");
   t.after(() => new Promise((resolve) => { server.close(resolve); server.closeAllConnections(); }));
-  return async (path, method = "GET", body) => {
+  return async (path, method = "GET", body, headers = {}) => {
     const response = await fetch(`http://127.0.0.1:${server.address().port}${path}`, {
       method,
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...headers },
       body: body === undefined ? undefined : JSON.stringify(body),
       signal: AbortSignal.timeout(3000)
     });
@@ -186,7 +187,8 @@ test("session completion bills at 12 INR/kWh and releases charger", async (t) =>
     { sql: /UPDATE chargers SET status = 'AVAILABLE'/, params: [7] }
   ]);
   const request = await client(t, db);
-  const result = await request("/api/sessions/4/complete", "POST", { energy_used_kwh: 2.125 });
+  const opToken = signToken({ userId: 1, role: "operator", mfaVerified: true }, TOKEN_SECRET);
+  const result = await request("/api/sessions/4/complete", "POST", { energy_used_kwh: 2.125 }, { Authorization: `Bearer ${opToken}` });
   assert.equal(result.status, 200);
   assert.deepEqual(result.body, { success: true, message: "Charging session completed successfully", rate_per_kwh: 12, energy_used_kwh: 2.125, amount: 25.5, session: { id: 4, amount: "25.50" } });
   assert.deepEqual(db.calls[1].params.slice(1), [2.125, 25.5, "4"]);
@@ -195,14 +197,16 @@ test("session completion bills at 12 INR/kWh and releases charger", async (t) =>
 
 test("session completion validates energy before querying", async (t) => {
   const request = await client(t, database(t));
+  const opToken = signToken({ userId: 1, role: "operator", mfaVerified: true }, TOKEN_SECRET);
   for (const body of [{}, { energy_used_kwh: -1 }, { energy_used_kwh: "invalid" }]) {
-    assert.equal((await request("/api/sessions/4/complete", "POST", body)).status, 400);
+    assert.equal((await request("/api/sessions/4/complete", "POST", body, { Authorization: `Bearer ${opToken}` })).status, 400);
   }
 });
 
 test("session completion missing session returns 404", async (t) => {
   const request = await client(t, database(t, [{ sql: /FROM charging_sessions/ }]));
-  assert.equal((await request("/api/sessions/4/complete", "POST", { energy_used_kwh: 0 })).status, 404);
+  const opToken = signToken({ userId: 1, role: "operator", mfaVerified: true }, TOKEN_SECRET);
+  assert.equal((await request("/api/sessions/4/complete", "POST", { energy_used_kwh: 0 }, { Authorization: `Bearer ${opToken}` })).status, 404);
 });
 
 test("database errors are sanitized in response and logs", async (t) => {

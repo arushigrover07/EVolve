@@ -32,7 +32,7 @@ if (@($frontend.ports.'80/tcp' | Where-Object { $_.HostPort -eq '5173' }).Count 
 # Require a quiet proxy before starting; only sanitized access entries are inspected.
 $recent = & docker logs --since 3s $frontend.id 2>&1
 if ($LASTEXITCODE -ne 0 -or @($recent | Where-Object { "$_" -match 'method=' }).Count) { throw 'Proxy traffic is active or cannot be inspected; wait for an isolated test window.' }
-$ready = Invoke-WebRequest -Uri 'http://127.0.0.1:5173/api/stations' -TimeoutSec 20 -SkipHttpErrorCheck
+$ready = try { Invoke-WebRequest -Uri 'http://127.0.0.1:5173/api/stations' -TimeoutSec 20 -UseBasicParsing } catch { if ($_.Exception.Response) { $_.Exception.Response } else { throw } }
 if ($ready.StatusCode -ne 200) { throw 'Failure test blocked: station API is not ready; no backend stopped.' }
 $tool = Get-Command $K6Path -CommandType Application -ErrorAction Stop
 $version = (& $tool.Source version | Out-String).Trim()
@@ -43,11 +43,16 @@ $directory = [IO.Path]::GetFullPath($ResultDirectory)
 foreach ($suffix in @('raw.json','requests.log','meta.json','result.json','stdout.txt','stderr.txt')) { if (Test-Path (Join-Path $directory "$Phase.$suffix")) { throw 'Failure artifacts already exist; no overwrite.' } }
 New-Item -ItemType Directory -Path $directory -Force | Out-Null
 $rawFile = Join-Path $directory "$Phase.raw.json"; $logFile = Join-Path $directory "$Phase.requests.log"
-$metadata = [ordered]@{ phase=$Phase; endpoint='http://127.0.0.1:5173/api/stations'; requestCount=1000; concurrency=20; timeoutSeconds=20; pacingSeconds=0.5; stopDelaySeconds=8; backendImage=$ApprovedBackendImage; proxyImage=$ApprovedProxyImage; targetService='backend3'; targetContainerId=$target.id; toolVersion=$version; toolSha256=(Get-FileHash $tool.Source -Algorithm SHA256).Hash; workloadSha256=(Get-FileHash (Join-Path $root 'benchmarks/q1c.mjs') -Algorithm SHA256).Hash.ToLowerInvariant(); proxyConfigSha256=(Get-FileHash $expectedConfig -Algorithm SHA256).Hash.ToLowerInvariant(); dataBeforeSha256=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($ready.Content))).ToLowerInvariant(); dataAfterSha256=$null; processExitCode=-1; recoverySucceeded=$false; stopRequestedAt=$null; stopCompletedAt=$null; observedInFlight=0 }
+$metadata = [ordered]@{ phase=$Phase; endpoint='http://127.0.0.1:5173/api/stations'; requestCount=1000; concurrency=20; timeoutSeconds=20; pacingSeconds=0.5; stopDelaySeconds=8; backendImage=$ApprovedBackendImage; proxyImage=$ApprovedProxyImage; targetService='backend3'; targetContainerId=$target.id; toolVersion=$version; toolSha256=(Get-FileHash $tool.Source -Algorithm SHA256).Hash; workloadSha256=(Get-FileHash (Join-Path $root 'benchmarks/q1c.mjs') -Algorithm SHA256).Hash.ToLowerInvariant(); proxyConfigSha256=(Get-FileHash $expectedConfig -Algorithm SHA256).Hash.ToLowerInvariant(); dataBeforeSha256=[BitConverter]::ToString([System.Security.Cryptography.SHA256]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes($ready.Content))).Replace("-","").ToLowerInvariant(); dataAfterSha256=$null; processExitCode=-1; recoverySucceeded=$false; stopRequestedAt=$null; stopCompletedAt=$null; observedInFlight=0 }
 $emptyConfig = New-TemporaryFile; [IO.File]::WriteAllText($emptyConfig.FullName, '{}')
 $process = [Diagnostics.Process]::new(); $process.StartInfo = [Diagnostics.ProcessStartInfo]::new($tool.Source)
 $process.StartInfo.UseShellExecute=$false; $process.StartInfo.RedirectStandardOutput=$true; $process.StartInfo.RedirectStandardError=$true
-foreach ($argument in @('run','--config',$emptyConfig.FullName,'--no-usage-report','--include-system-env-vars=false','--log-format','raw','--console-output',$logFile,'--env',"PHASE=$Phase",'--env',"RAW_SUMMARY_FILE=$rawFile",(Join-Path $root 'benchmarks/q1c.mjs'))) { $process.StartInfo.ArgumentList.Add($argument) }
+$argsList = @('run','--config',$emptyConfig.FullName,'--no-usage-report','--include-system-env-vars=false','--log-format','raw','--console-output',$logFile,'--env',"PHASE=$Phase",'--env',"RAW_SUMMARY_FILE=$rawFile",(Join-Path $root 'benchmarks/q1c.mjs'))
+if ($null -ne $process.StartInfo.ArgumentList) {
+    foreach ($argument in $argsList) { $process.StartInfo.ArgumentList.Add($argument) }
+} else {
+    $process.StartInfo.Arguments = ($argsList | ForEach-Object { if ($_ -match '[\s"]') { '"{0}"' -f ($_ -replace '"', '\"') } else { $_ } }) -join ' '
+}
 $stopAttempted=$false; $processStarted=$false
 try {
     if (!$process.Start()) { throw 'k6 did not start; no backend stopped.' }
@@ -60,7 +65,7 @@ try {
         if (!$stopAttempted -and $progress.firstRequestAt -and ([DateTimeOffset]::UtcNow - ([DateTimeOffset]$progress.firstRequestAt)).TotalSeconds -ge 8 -and $progress.inFlight -gt 0) {
             $loadProcesses = @(Get-Process -Name k6 -ErrorAction SilentlyContinue)
             if ($loadProcesses.Count -ne 1 -or $loadProcesses[0].Id -ne $process.Id -or (Get-Process -Name hey,ab -ErrorAction SilentlyContinue)) { throw 'Concurrent/unexpected k6 process; stop cancelled.' }
-            $identity = & docker inspect --format '{{.Id}}|{{.Image}}|{{index .Config.Labels "com.docker.compose.project"}}|{{index .Config.Labels "com.docker.compose.service"}}|{{.State.Running}}' $target.id
+            $identity = & docker inspect --format '{{.Id}}|{{.Image}}|{{index .Config.Labels `com.docker.compose.project`}}|{{index .Config.Labels `com.docker.compose.service`}}|{{.State.Running}}' $target.id
             if ($LASTEXITCODE -ne 0 -or $identity -cne ($target.id+'|'+$ApprovedBackendImage+'|evolve|backend3|true')) { throw 'Stop target identity changed.' }
             $metadata.observedInFlight=$progress.inFlight; $metadata.stopRequestedAt=[DateTimeOffset]::UtcNow.ToString('o'); $stopAttempted=$true
             & docker stop --time 15 $target.id | Out-Null
@@ -77,12 +82,12 @@ try {
     try {
         if ($processStarted -and !$process.HasExited) { $process.Kill(); $process.WaitForExit() }
         if ($stopAttempted) {
-            $identity = & docker inspect --format '{{.Id}}|{{.Image}}|{{index .Config.Labels "com.docker.compose.project"}}|{{index .Config.Labels "com.docker.compose.service"}}' $target.id
+            $identity = & docker inspect --format '{{.Id}}|{{.Image}}|{{index .Config.Labels `com.docker.compose.project`}}|{{index .Config.Labels `com.docker.compose.service`}}' $target.id
             if ($LASTEXITCODE -ne 0 -or $identity -cne ($target.id+'|'+$ApprovedBackendImage+'|evolve|backend3')) { throw 'Recovery target changed; refusing any broader recovery operation.' }
             & docker start $target.id | Out-Null
             if ($LASTEXITCODE -ne 0) { throw 'Exact backend restoration failed.' }
             $deadline=[DateTimeOffset]::UtcNow.AddSeconds(60)
-            do { $health=& docker inspect --format '{{if (index .State "Health")}}{{json (index (index .State "Health") "Status")}}{{else}}null{{end}}' $target.id; if ($health -eq '"healthy"') { $metadata.recoverySucceeded=$true; break }; Start-Sleep -Seconds 1 } while ([DateTimeOffset]::UtcNow -lt $deadline)
+            do { $health=& docker inspect --format '{{if (index .State `Health`)}}{{json (index (index .State `Health`) `Status`)}}{{else}}null{{end}}' $target.id; if ($health -eq '"healthy"') { $metadata.recoverySucceeded=$true; break }; Start-Sleep -Seconds 1 } while ([DateTimeOffset]::UtcNow -lt $deadline)
         }
     } finally {
         if ($processStarted) {
@@ -91,7 +96,7 @@ try {
         }
         Remove-Item -LiteralPath $emptyConfig.FullName
         if ($metadata.recoverySucceeded) {
-            try { $after=Invoke-WebRequest -Uri 'http://127.0.0.1:5173/api/stations' -TimeoutSec 20 -SkipHttpErrorCheck; if ($after.StatusCode -eq 200) { $metadata.dataAfterSha256=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($after.Content))).ToLowerInvariant() } } catch { $metadata.dataAfterSha256=$null }
+            try { $after=try { Invoke-WebRequest -Uri 'http://127.0.0.1:5173/api/stations' -TimeoutSec 20 -UseBasicParsing } catch { if ($_.Exception.Response) { $_.Exception.Response } else { throw } }; if ($after.StatusCode -eq 200) { $metadata.dataAfterSha256=[BitConverter]::ToString([System.Security.Cryptography.SHA256]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes($after.Content))).Replace("-","").ToLowerInvariant() } } catch { $metadata.dataAfterSha256=$null }
         }
         [IO.File]::WriteAllText((Join-Path $directory "$Phase.meta.json"),($metadata|ConvertTo-Json -Depth 20))
     }

@@ -1,43 +1,57 @@
 import React, { useState } from 'react';
-import { API_BASE_URL } from '../config';
+import { loginUser, verifyMfaCode, setAuthToken, setAuthUser } from '../api';
 
 function LoginModal({ isOpen, onClose, onLoginSuccess }) {
   const [email, setEmail] = useState('demo@evolve.com');
-  const [password, setPassword] = useState('demo123');
+  const [password, setPassword] = useState('');
+  const [step, setStep] = useState('CREDENTIALS'); // 'CREDENTIALS' | 'MFA'
+  const [mfaToken, setMfaToken] = useState(null);
+  const [totpCode, setTotpCode] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e) => {
+  const handleModalClose = () => {
+    setStep('CREDENTIALS');
+    setMfaToken(null);
+    setTotpCode('');
+    setErrorMsg(null);
+    setSuccessMsg(null);
+    onClose();
+  };
+
+  const handleCredentialsSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
     setErrorMsg(null);
     setSuccessMsg(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
+      const data = await loginUser(email, password);
 
-      const data = await response.json();
+      if (data.mfa_required) {
+        // Backend returned temporary MFA challenge token.
+        // NOTE: We keep this challenge token strictly in component state.
+        // It is NOT stored as a verified session token.
+        setMfaToken(data.mfa_token);
+        setStep('MFA');
+      } else if (data.token && data.user) {
+        // Direct authentication without MFA
+        setAuthToken(data.token);
+        setAuthUser(data.user);
+        setSuccessMsg(`Authenticated as ${data.user.name} (${data.user.role || 'User'})`);
 
-      if (!response.ok || !data.success) {
-        throw new Error(data.message || 'Authentication failed. Please check credentials.');
+        setTimeout(() => {
+          if (onLoginSuccess) {
+            onLoginSuccess(data.user);
+          }
+          handleModalClose();
+        }, 800);
+      } else {
+        throw new Error('Authentication response was incomplete.');
       }
-
-      setSuccessMsg(`Authenticated as ${data.user.name} (Role: ${data.user.role || 'User'})`);
-      
-      setTimeout(() => {
-        if (onLoginSuccess) {
-          onLoginSuccess(data.user);
-        }
-        onClose();
-        setSuccessMsg(null);
-      }, 1000);
     } catch (err) {
       setErrorMsg(err.message || 'Unable to connect to login authentication service');
     } finally {
@@ -45,24 +59,66 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
     }
   };
 
+  const handleMfaSubmit = async (e) => {
+    e.preventDefault();
+    if (!mfaToken) {
+      setErrorMsg('MFA challenge token missing. Please log in again.');
+      setStep('CREDENTIALS');
+      return;
+    }
+
+    setSubmitting(true);
+    setErrorMsg(null);
+
+    try {
+      const data = await verifyMfaCode(mfaToken, totpCode.trim());
+
+      if (data.token && data.user) {
+        // Fully verified session token returned after valid TOTP code
+        setAuthToken(data.token);
+        setAuthUser(data.user);
+        setSuccessMsg(`MFA Verified! Logged in as ${data.user.name} (${data.user.role || 'User'})`);
+
+        setTimeout(() => {
+          if (onLoginSuccess) {
+            onLoginSuccess(data.user);
+          }
+          handleModalClose();
+        }, 800);
+      } else {
+        throw new Error('MFA verification did not return an active session.');
+      }
+    } catch (err) {
+      setErrorMsg(err.message || 'Invalid or expired TOTP code');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay" onClick={handleModalClose}>
       <div className="modal-container login-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '440px' }}>
         <div className="modal-header">
           <div>
             <span className="modal-eyebrow">PORTAL ACCESS</span>
-            <h2 className="modal-title">EVolve Login</h2>
+            <h2 className="modal-title">
+              {step === 'MFA' ? 'Two-Factor Verification' : 'EVolve Login'}
+            </h2>
           </div>
-          <button className="modal-close-btn" onClick={onClose} aria-label="Close modal">✕</button>
+          <button className="modal-close-btn" onClick={handleModalClose} aria-label="Close modal">✕</button>
         </div>
 
         <div className="modal-body">
           <div className="system-notice-box" style={{ marginBottom: '20px' }}>
             <span className="notice-icon">⚡</span>
             <div>
-              <strong>PostgreSQL Database Authentication</strong>
+              <strong>
+                {step === 'MFA' ? 'RFC 6238 TOTP Multi-Factor Authentication' : 'PostgreSQL Database Authentication'}
+              </strong>
               <p style={{ fontSize: '0.82rem', margin: '2px 0 0 0', color: 'var(--text-muted)' }}>
-                Validates credentials against Neon PostgreSQL database records.
+                {step === 'MFA'
+                  ? 'Enter the 6-digit TOTP code generated by your authenticator app.'
+                  : 'Validates credentials securely using bcrypt password hashing.'}
               </p>
             </div>
           </div>
@@ -77,10 +133,61 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
             <div className="booking-success-state" style={{ padding: '20px 0', textAlign: 'center' }}>
               <span style={{ fontSize: '2.5rem' }}>✅</span>
               <h3 style={{ marginTop: '12px', color: 'var(--status-success-text)' }}>{successMsg}</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Session active. Closing dialog...</p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Verified session active. Closing...</p>
             </div>
+          ) : step === 'MFA' ? (
+            /* STEP 2: TOTP CODE ENTRY */
+            <form onSubmit={handleMfaSubmit} className="login-form">
+              <div className="form-group" style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-dark)' }}>
+                  6-Digit Authenticator Code
+                </label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength="6"
+                  autoFocus
+                  value={totpCode}
+                  onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, ''))}
+                  placeholder="123456"
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '12px 14px',
+                    borderRadius: 'var(--radius-sm)',
+                    border: '1px solid var(--border-color)',
+                    background: 'var(--bg-surface)',
+                    fontSize: '1.25rem',
+                    textAlign: 'center',
+                    letterSpacing: '0.35rem',
+                    fontWeight: 'bold'
+                  }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between', alignItems: 'center' }}>
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={() => {
+                    setStep('CREDENTIALS');
+                    setMfaToken(null);
+                    setTotpCode('');
+                    setErrorMsg(null);
+                  }}
+                  disabled={submitting}
+                >
+                  ← Back
+                </button>
+                <button type="submit" className="btn-primary" disabled={submitting || totpCode.length < 6}>
+                  {submitting ? 'Verifying...' : 'Verify TOTP'}
+                </button>
+              </div>
+            </form>
           ) : (
-            <form onSubmit={handleSubmit} className="login-form">
+            /* STEP 1: EMAIL & PASSWORD */
+            <form onSubmit={handleCredentialsSubmit} className="login-form">
               <div className="form-group" style={{ marginBottom: '16px' }}>
                 <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-dark)' }}>
                   Email Address
@@ -89,7 +196,7 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="demo@evolve.com"
+                  placeholder="operator@evolve.com"
                   required
                   style={{
                     width: '100%',
@@ -110,7 +217,7 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="demo123"
+                  placeholder="Enter your password"
                   required
                   style={{
                     width: '100%',
@@ -124,7 +231,7 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }) {
               </div>
 
               <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-                <button type="button" className="btn-secondary" onClick={onClose} disabled={submitting}>
+                <button type="button" className="btn-secondary" onClick={handleModalClose} disabled={submitting}>
                   Cancel
                 </button>
                 <button type="submit" className="btn-primary" disabled={submitting}>

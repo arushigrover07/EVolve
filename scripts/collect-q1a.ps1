@@ -11,12 +11,12 @@ $rows = @()
 for ($number=1; $number -le $Requests; $number++) {
     $status=0; $id=''; $success=$false; $dataHash=$null
     try {
-        $response=Invoke-WebRequest -Uri ('http://127.0.0.1:5173'+$path) -TimeoutSec 10 -SkipHttpErrorCheck -DisableKeepAlive
+        $response=try { Invoke-WebRequest -Uri ('http://127.0.0.1:5173'+$path) -TimeoutSec 10 -DisableKeepAlive -UseBasicParsing } catch { if ($_.Exception.Response) { $_.Exception.Response } else { throw } }
         $status=[int]$response.StatusCode; $payload=$response.Content | ConvertFrom-Json
         if ($Endpoint -eq 'Stations') {
             $id=[string]$response.Headers['X-Instance-Id']
             $success=$status -eq 200 -and $payload -is [array] -and $id -match '^[a-f0-9-]{36}$'
-            $dataHash=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($response.Content))).ToLowerInvariant()
+            $dataHash=[BitConverter]::ToString([System.Security.Cryptography.SHA256]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes($response.Content))).Replace("-","").ToLowerInvariant()
         } else {
             if ($payload.instanceId -match '^[a-f0-9-]{36}$') { $id=$payload.instanceId }
             $success=$status -eq 200 -and $id -ne '' -and [string]$response.Headers['X-Instance-Id'] -ceq $id

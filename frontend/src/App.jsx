@@ -7,22 +7,25 @@ import BookingsSection from './components/BookingsSection';
 import Footer from './components/Footer';
 import BookingModal from './components/BookingModal';
 import LoginModal from './components/LoginModal';
+import { getAuthUser, logout } from './api';
 
 function App() {
   const [selectedStation, setSelectedStation] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState({
-    id: 1,
-    name: 'Demo Operator',
-    email: 'operator@evolve.cloud'
-  });
+  const [currentUser, setCurrentUser] = useState(() => getAuthUser());
 
   const handleScrollToStations = () => {
     const element = document.getElementById('stations');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handleLogout = () => {
+    logout();
+    setCurrentUser(null);
+    setRefreshKey((prev) => prev + 1);
   };
 
   useEffect(() => {
@@ -50,7 +53,7 @@ function App() {
         onFindChargerClick={handleScrollToStations}
         onLoginClick={() => setIsLoginOpen(true)}
         currentUser={currentUser}
-        onLogout={() => setCurrentUser(null)}
+        onLogout={handleLogout}
       />
 
       {/* 2. Main Content Area */}
@@ -62,10 +65,14 @@ function App() {
         <StatusSection />
 
         {/* Nearby Charging Stations & Interactive Search/Filter */}
-        <StationsSection key={refreshKey} onBookClick={(station) => setSelectedStation(station)} />
+        <StationsSection key={`stations-${refreshKey}`} onBookClick={(station) => setSelectedStation(station)} />
 
         {/* User Bookings & Reservations Section */}
-        <BookingsSection key={`bookings-${refreshKey}`} onBookNewClick={handleScrollToStations} />
+        <BookingsSection
+          key={`bookings-${refreshKey}`}
+          currentUser={currentUser}
+          onBookNewClick={handleScrollToStations}
+        />
       </main>
 
       {/* 3. Footer */}
@@ -75,6 +82,7 @@ function App() {
       {selectedStation && (
         <BookingModal
           station={selectedStation}
+          currentUser={currentUser}
           onClose={() => setSelectedStation(null)}
           onBookingSuccess={() => {
             setRefreshKey((prev) => prev + 1);
@@ -82,11 +90,14 @@ function App() {
         />
       )}
 
-      {/* 5. Operator Login Modal Dialog */}
+      {/* 5. Operator / User Login Modal Dialog */}
       <LoginModal
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
-        onLoginSuccess={(user) => setCurrentUser(user)}
+        onLoginSuccess={(user) => {
+          setCurrentUser(user);
+          setRefreshKey((prev) => prev + 1);
+        }}
       />
     </div>
   );

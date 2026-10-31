@@ -1,0 +1,14 @@
+﻿Γ£ö frontend API routing: Compose uses the browser origin (1.8755ms)
+Γ£ö frontend API routing: Compose stays same-origin on a remote Docker host (1.2713ms)
+Γ£ö frontend API routing: local development fallback is unchanged (1.3129ms)
+Γ£ö frontend API routing: empty deployed configuration retains the Render fallback (2.6645ms)
+Γ£ö frontend API routing: unset deployed configuration retains the Render fallback (0.8036ms)
+Γ£ö frontend API routing: explicit deployed API override is preserved (0.5922ms)
+Γä╣ tests 6
+Γä╣ suites 0
+Γä╣ pass 6
+Γä╣ fail 0
+Γä╣ cancelled 0
+Γä╣ skipped 0
+Γä╣ todo 0
+Γä╣ duration_ms 153.2858

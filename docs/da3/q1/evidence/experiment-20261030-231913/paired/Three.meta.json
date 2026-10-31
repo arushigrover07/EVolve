@@ -1,0 +1,21 @@
+{
+    "configuration":  "Three",
+    "endpoint":  "http://127.0.0.1:5173/api/stations",
+    "toolName":  "k6",
+    "toolVersion":  "k6.exe v1.8.2 (commit/682f083071, go1.26.9, windows/amd64)",
+    "toolSha256":  "ca7a68ed62103986cf7bed8c15e25dc0cc90f8f08f4c05cddafb29f2df53ca6e",
+    "runId":  "5b5fdfbf-2823-4d02-a3d9-4679640bbd1d",
+    "processExitCode":  -1,
+    "workloadSha256":  "1818484fbc8d3f5bed721d707f188829127e57e2dec32fbc557f9060acc0917b",
+    "proxyConfigSha256":  "ab0ca9abdb10f36fc2f589c90324d22f6ff35e63748a58dac5f805e3f679768f",
+    "backendImage":  "sha256:0fd2b2d4ca403d6756563e75a1bb995f7972420bb6694e6d59062fa8b0356d96",
+    "proxyImage":  "sha256:046f9aac7098d53939f4ce1f50a0c59e69100c7c0bf88938107112aa29bef8d0",
+    "backendImages":  [
+                          "sha256:0fd2b2d4ca403d6756563e75a1bb995f7972420bb6694e6d59062fa8b0356d96",
+                          "sha256:0fd2b2d4ca403d6756563e75a1bb995f7972420bb6694e6d59062fa8b0356d96",
+                          "sha256:0fd2b2d4ca403d6756563e75a1bb995f7972420bb6694e6d59062fa8b0356d96"
+                      ],
+    "dataBeforeSha256":  "8dc1a4fd5ba2bcef7bfac5bac7c6e8979952d555fdea0ff14c2c8e3e15873dc2",
+    "dataAfterSha256":  "8dc1a4fd5ba2bcef7bfac5bac7c6e8979952d555fdea0ff14c2c8e3e15873dc2",
+    "warmupRequests":  0
+}

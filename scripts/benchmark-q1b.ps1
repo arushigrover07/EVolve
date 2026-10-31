@@ -14,10 +14,10 @@ $receipt = Invoke-Q1bPreflight -Phase BeforeRun -ApprovedBackendImage $ApprovedB
 # A live process is insufficient. These unmeasured read-only snapshot requests
 # bracket the 1000 measured requests; no warm-up workload is added.
 $endpoint = if ($Configuration -eq 'One') { 'http://127.0.0.1:5174/api/stations' } else { 'http://127.0.0.1:5173/api/stations' }
-$readiness = Invoke-WebRequest -Uri $endpoint -TimeoutSec 20 -SkipHttpErrorCheck
+$readiness = try { Invoke-WebRequest -Uri $endpoint -TimeoutSec 20 -UseBasicParsing } catch { if ($_.Exception.Response) { $_.Exception.Response } else { throw } }
 if ($readiness.StatusCode -ne 200) { throw 'Benchmark blocked: the read-only station API is not ready. No measured workload started.' }
 try { $null = $readiness.Content | ConvertFrom-Json } catch { throw 'Benchmark blocked: station API returned invalid JSON.' }
-$dataBefore = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($readiness.Content))).ToLowerInvariant()
+$dataBefore = [BitConverter]::ToString([System.Security.Cryptography.SHA256]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes($readiness.Content))).Replace("-","").ToLowerInvariant()
 $tool = Get-Command $K6Path -CommandType Application -ErrorAction Stop
 $version = (& $tool.Source version | Out-String).Trim()
 if ($LASTEXITCODE -ne 0 -or $version -cnotmatch '^k6(?:\.exe)? v[0-9]+\.[0-9]+\.[0-9]+[^\r\n]*$') { throw 'Cannot determine k6 version.' }
@@ -51,8 +51,8 @@ try {
     } catch { $metadata.processExitCode = -1 }
 } finally { Remove-Item -LiteralPath $emptyK6Config.FullName }
 try {
-    $after = Invoke-WebRequest -Uri $endpoint -TimeoutSec 20 -SkipHttpErrorCheck
-    if ($after.StatusCode -eq 200) { $metadata.dataAfterSha256 = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($after.Content))).ToLowerInvariant() }
+    $after = try { Invoke-WebRequest -Uri $endpoint -TimeoutSec 20 -UseBasicParsing } catch { if ($_.Exception.Response) { $_.Exception.Response } else { throw } }
+    if ($after.StatusCode -eq 200) { $metadata.dataAfterSha256 = [BitConverter]::ToString([System.Security.Cryptography.SHA256]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes($after.Content))).Replace("-","").ToLowerInvariant() }
 } catch { $metadata.dataAfterSha256 = $null }
 # Persist even a failed process exit. Raw k6 output never marks itself accepted.
 [IO.File]::WriteAllText($metaFile, ($metadata | ConvertTo-Json -Depth 20))

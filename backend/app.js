@@ -1,9 +1,42 @@
 const express = require("express");
 const cors = require("cors");
 const { randomUUID } = require("node:crypto");
+const bcrypt = require("bcrypt");
 const { logError } = require("./logging");
+const {
+  TOKEN_SECRET,
+  MFA_TOKEN_EXPIRY_MS,
+  generateTotpSecret,
+  generateTotpCode,
+  verifyTotpCode,
+  generateOtpAuthUrl,
+  signToken,
+  verifyToken,
+  authenticateToken,
+  authorizeRoles
+} = require("./auth");
 
-function createApp({ db, instanceId = randomUUID(), logger = console } = {}) {
+const BCRYPT_SALT_ROUNDS = 12;
+
+async function hashPassword(plainPassword, saltRounds = BCRYPT_SALT_ROUNDS) {
+  if (typeof plainPassword !== "string" || plainPassword.length === 0) {
+    throw new Error("Password must be a non-empty string");
+  }
+  return bcrypt.hash(plainPassword, saltRounds);
+}
+
+async function verifyPassword(plainPassword, hashedPassword) {
+  if (typeof plainPassword !== "string" || typeof hashedPassword !== "string" || !hashedPassword) {
+    return false;
+  }
+  try {
+    return await bcrypt.compare(plainPassword, hashedPassword);
+  } catch {
+    return false;
+  }
+}
+
+function createApp({ db, instanceId = randomUUID(), logger = console, authSecret = TOKEN_SECRET } = {}) {
   if (!db || typeof db.query !== "function") throw new TypeError("A database dependency is required");
   if (!/^[A-Za-z0-9_-]{1,64}$/.test(instanceId)) throw new TypeError("Invalid instance identifier");
   const app = express();
@@ -14,6 +47,10 @@ function createApp({ db, instanceId = randomUUID(), logger = console } = {}) {
   });
   app.use(cors());
   app.use(express.json());
+
+  // Security middlewares bound to the app instance's token secret
+  const requireAuth = authenticateToken(authSecret);
+  const requireRole = (...roles) => authorizeRoles(...roles);
   // Liveness only: does not query the database or imply database readiness.
   app.get("/health", (req, res) => res.json({ status: "ok" }));
   app.get("/api/instance", (req, res) => res.json({ instanceId }));
@@ -200,8 +237,8 @@ app.post("/api/stations", async (req, res) => {
   }
 });
 
-// 4. PUT /api/stations/:id - Update an existing station by ID (supports latitude & longitude)
-app.put("/api/stations/:id", async (req, res) => {
+// 4. PUT /api/stations/:id - Update an existing station by ID (Restricted: operator, admin)
+app.put("/api/stations/:id", requireAuth, requireRole("operator", "admin"), async (req, res) => {
   const { id } = req.params;
   const { name, location, status = "ACTIVE", latitude, longitude } = req.body;
 
@@ -236,8 +273,8 @@ app.put("/api/stations/:id", async (req, res) => {
   }
 });
 
-// 5. DELETE /api/stations/:id - Delete a station by ID
-app.delete("/api/stations/:id", async (req, res) => {
+// 5. DELETE /api/stations/:id - Delete a station by ID (Restricted: operator, admin)
+app.delete("/api/stations/:id", requireAuth, requireRole("operator", "admin"), async (req, res) => {
   const { id } = req.params;
   try {
     const result = await db.query(
@@ -344,8 +381,8 @@ app.post("/api/chargers", async (req, res) => {
   }
 });
 
-// 4. PUT /api/chargers/:id - Update an existing charger by ID
-app.put("/api/chargers/:id", async (req, res) => {
+// 4. PUT /api/chargers/:id - Update an existing charger by ID (Restricted: operator, admin)
+app.put("/api/chargers/:id", requireAuth, requireRole("operator", "admin"), async (req, res) => {
   const { id } = req.params;
   const { station_id, charger_type, power_kw, status = "AVAILABLE" } = req.body;
 
@@ -380,8 +417,8 @@ app.put("/api/chargers/:id", async (req, res) => {
   }
 });
 
-// 5. DELETE /api/chargers/:id - Delete a charger by ID
-app.delete("/api/chargers/:id", async (req, res) => {
+// 5. DELETE /api/chargers/:id - Delete a charger by ID (Restricted: operator, admin)
+app.delete("/api/chargers/:id", requireAuth, requireRole("operator", "admin"), async (req, res) => {
   const { id } = req.params;
   try {
     const result = await db.query(
@@ -428,7 +465,7 @@ app.post("/api/login", async (req, res) => {
     }
 
     const queryText = `
-      SELECT id, name, email, password_hash, role, created_at
+      SELECT id, name, email, password_hash, role, totp_secret, mfa_enabled, created_at
       FROM users
       WHERE LOWER(email) = LOWER($1)
     `;
@@ -443,11 +480,9 @@ app.post("/api/login", async (req, res) => {
 
     const user = result.rows[0];
 
-    // Validate submitted password against stored password_hash / demo password
-    const isPasswordValid = 
-      password === user.password_hash || 
-      (user.password_hash && user.password_hash.startsWith('demo_password') && password === 'demo123') ||
-      password.trim() === 'demo123';
+    // Cryptographically verify submitted password against stored salted bcrypt hash
+    // Constant-time comparison mitigates timing attacks; invalid hash formats safely return false
+    const isPasswordValid = await verifyPassword(password, user.password_hash);
 
     if (!isPasswordValid) {
       return res.status(401).json({
@@ -456,10 +491,32 @@ app.post("/api/login", async (req, res) => {
       });
     }
 
-    // Return safe user payload (never include password or hash)
+    // Return safe user payload (never include password, hash, or secret)
+    const isMfaActive = Boolean(user.mfa_enabled && user.totp_secret);
+
+    if (isMfaActive) {
+      const mfaChallengeToken = signToken(
+        { userId: user.id, email: user.email, role: user.role, mfaRequired: true, mfaVerified: false },
+        authSecret,
+        MFA_TOKEN_EXPIRY_MS
+      );
+      return res.json({
+        success: true,
+        mfa_required: true,
+        mfa_token: mfaChallengeToken,
+        message: "Password verified. Please enter the 6-digit TOTP code from your authenticator app."
+      });
+    }
+
+    const sessionToken = signToken(
+      { userId: user.id, email: user.email, role: user.role, mfaRequired: false, mfaVerified: true },
+      authSecret
+    );
+
     res.json({
       success: true,
       message: "Login successful",
+      token: sessionToken,
       user: {
         id: user.id,
         name: user.name,
@@ -472,6 +529,195 @@ app.post("/api/login", async (req, res) => {
     res.status(500).json({
       success: false,
       message: "An error occurred during authentication",
+      error: "Internal server error"
+    });
+  }
+});
+
+// POST /api/mfa/verify - Verify 6-digit TOTP code and issue fully authenticated session token
+app.post("/api/mfa/verify", async (req, res) => {
+  try {
+    const { mfa_token, totp_code } = req.body;
+    const authHeader = req.headers.authorization;
+    const token = mfa_token || (authHeader && authHeader.startsWith("Bearer ") ? authHeader.slice(7).trim() : null);
+
+    if (!token || !totp_code) {
+      return res.status(400).json({
+        success: false,
+        message: "MFA challenge token and 6-digit totp_code are required"
+      });
+    }
+
+    const payload = verifyToken(token, authSecret);
+    if (!payload || !payload.userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid or expired MFA authentication token"
+      });
+    }
+
+    const userResult = await db.query(
+      "SELECT id, name, email, role, totp_secret, mfa_enabled FROM users WHERE id = $1",
+      [payload.userId]
+    );
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "User account not found"
+      });
+    }
+
+    const user = userResult.rows[0];
+    if (!user.totp_secret) {
+      return res.status(400).json({
+        success: false,
+        message: "TOTP MFA is not configured for this account. Please enroll first."
+      });
+    }
+
+    const isCodeValid = verifyTotpCode(totp_code, user.totp_secret);
+    if (!isCodeValid) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid or expired TOTP code. Please check your authenticator application."
+      });
+    }
+
+    const fullSessionToken = signToken(
+      { userId: user.id, email: user.email, role: user.role, mfaRequired: false, mfaVerified: true },
+      authSecret
+    );
+
+    res.json({
+      success: true,
+      message: "MFA verification successful",
+      token: fullSessionToken,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    logError(logger, "Error during TOTP verification:", error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred during MFA verification",
+      error: "Internal server error"
+    });
+  }
+});
+
+// POST /api/mfa/enroll - Begin TOTP enrollment for the authenticated user
+app.post("/api/mfa/enroll", requireAuth, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const email = req.user.email;
+
+    const userCheck = await db.query(
+      "SELECT id, email, totp_secret, mfa_enabled FROM users WHERE id = $1",
+      [userId]
+    );
+
+    if (userCheck.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "User account not found"
+      });
+    }
+
+    const currentUser = userCheck.rows[0];
+
+    // If MFA is currently active, require current TOTP code to prevent unauthorized replacement or disabling
+    if (currentUser.mfa_enabled && currentUser.totp_secret) {
+      const { current_totp_code } = req.body;
+      if (!current_totp_code || !verifyTotpCode(current_totp_code, currentUser.totp_secret)) {
+        return res.status(403).json({
+          success: false,
+          message: "Forbidden: current 6-digit TOTP code is required to reconfigure or replace an active MFA setup"
+        });
+      }
+    }
+
+    const secret = generateTotpSecret(20);
+    const otpauthUrl = generateOtpAuthUrl({ email, secret, issuer: "EVolve" });
+
+    // Store pending secret (with mfa_enabled = false until confirmed)
+    await db.query(
+      "UPDATE users SET totp_secret = $1, mfa_enabled = false WHERE id = $2",
+      [secret, userId]
+    );
+
+    res.json({
+      success: true,
+      message: "TOTP enrollment initiated. Scan the QR code or enter the secret in your authenticator app, then confirm with a 6-digit code.",
+      secret: secret,
+      otpauth_url: otpauthUrl
+    });
+  } catch (error) {
+    logError(logger, "Error initiating TOTP enrollment:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to initiate TOTP enrollment",
+      error: "Internal server error"
+    });
+  }
+});
+
+// POST /api/mfa/confirm - Complete TOTP enrollment by verifying the first code
+app.post("/api/mfa/confirm", requireAuth, async (req, res) => {
+  try {
+    const { totp_code } = req.body;
+    const userId = req.user.userId;
+
+    if (!totp_code) {
+      return res.status(400).json({
+        success: false,
+        message: "6-digit totp_code is required"
+      });
+    }
+
+    const userResult = await db.query(
+      "SELECT id, name, email, role, totp_secret FROM users WHERE id = $1",
+      [userId]
+    );
+
+    if (userResult.rows.length === 0 || !userResult.rows[0].totp_secret) {
+      return res.status(400).json({
+        success: false,
+        message: "No pending TOTP enrollment found. Call /api/mfa/enroll first."
+      });
+    }
+
+    const user = userResult.rows[0];
+    const isValid = verifyTotpCode(totp_code, user.totp_secret);
+
+    if (!isValid) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid TOTP code. Enrollment confirmation failed."
+      });
+    }
+
+    await db.query("UPDATE users SET mfa_enabled = true WHERE id = $1", [userId]);
+
+    const verifiedToken = signToken(
+      { userId: user.id, email: user.email, role: user.role, mfaRequired: false, mfaVerified: true },
+      authSecret
+    );
+
+    res.json({
+      success: true,
+      message: "MFA enabled successfully. Authenticator app linked.",
+      token: verifiedToken
+    });
+  } catch (error) {
+    logError(logger, "Error confirming TOTP enrollment:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to confirm TOTP enrollment",
       error: "Internal server error"
     });
   }
@@ -624,8 +870,8 @@ app.post("/api/bookings", async (req, res) => {
   }
 });
 
-// 4. PUT /api/bookings/:id - Update an existing booking by ID
-app.put("/api/bookings/:id", async (req, res) => {
+// 4. PUT /api/bookings/:id - Update an existing booking by ID (Restricted: operator, admin, or owning user)
+app.put("/api/bookings/:id", requireAuth, requireRole("operator", "admin", "user"), async (req, res) => {
   const { id } = req.params;
   const { user_id, charger_id, start_time, end_time, status = "BOOKED" } = req.body;
 
@@ -654,9 +900,22 @@ app.put("/api/bookings/:id", async (req, res) => {
   }
 
   try {
+    // If regular user, ensure they only modify their own booking
+    if (req.user.role === "user") {
+      const existing = await db.query("SELECT user_id FROM bookings WHERE id = $1", [id]);
+      if (existing.rows.length === 0) {
+        return res.status(404).json({ success: false, message: "Booking not found" });
+      }
+      if (existing.rows[0].user_id !== req.user.userId) {
+        return res.status(403).json({ success: false, message: "Forbidden: you can only update your own bookings" });
+      }
+    }
+
+    const targetUserId = req.user.role === "user" ? req.user.userId : (user_id || req.user.userId);
+
     const result = await db.query(
       "UPDATE bookings SET user_id = $1, charger_id = $2, start_time = $3, end_time = $4, status = $5 WHERE id = $6 RETURNING *",
-      [user_id, charger_id, start_time, end_time, status, id]
+      [targetUserId, charger_id, start_time, end_time, status, id]
     );
 
     if (result.rows.length === 0) {
@@ -677,10 +936,21 @@ app.put("/api/bookings/:id", async (req, res) => {
   }
 });
 
-// 5. DELETE /api/bookings/:id - Delete a booking by ID
-app.delete("/api/bookings/:id", async (req, res) => {
+// 5. DELETE /api/bookings/:id - Delete a booking by ID (Restricted: operator, admin, or owning user)
+app.delete("/api/bookings/:id", requireAuth, requireRole("operator", "admin", "user"), async (req, res) => {
   const { id } = req.params;
   try {
+    // If regular user, ensure they only delete their own booking
+    if (req.user.role === "user") {
+      const existing = await db.query("SELECT user_id FROM bookings WHERE id = $1", [id]);
+      if (existing.rows.length === 0) {
+        return res.status(404).json({ success: false, message: "Booking not found" });
+      }
+      if (existing.rows[0].user_id !== req.user.userId) {
+        return res.status(403).json({ success: false, message: "Forbidden: you can only delete your own bookings" });
+      }
+    }
+
     const result = await db.query(
       "DELETE FROM bookings WHERE id = $1 RETURNING *",
       [id]
@@ -909,12 +1179,28 @@ app.post("/api/sessions/start", async (req, res) => {
 });
 
 // POST /api/sessions/:id/complete - Complete a session and calculate final bill (₹12/kWh)
-app.post("/api/sessions/:id/complete", async (req, res) => {
+// Restricted: operator, admin, or owning user
+app.post("/api/sessions/:id/complete", requireAuth, requireRole("operator", "admin", "user"), async (req, res) => {
   const { id } = req.params;
-  const { energy_used_kwh } = req.body;
 
+  if (!/^\d+$/.test(String(id)) || Number(id) <= 0) {
+    return res.status(400).json({
+      success: false,
+      message: "Valid numeric session ID is required"
+    });
+  }
+
+  const { energy_used_kwh } = req.body || {};
   const energy = Number(energy_used_kwh);
-  if (energy_used_kwh === undefined || isNaN(energy) || energy < 0) {
+
+  if (
+    energy_used_kwh === undefined ||
+    energy_used_kwh === null ||
+    typeof energy_used_kwh === "boolean" ||
+    (typeof energy_used_kwh === "string" && energy_used_kwh.trim() === "") ||
+    !Number.isFinite(energy) ||
+    energy < 0
+  ) {
     return res.status(400).json({
       success: false,
       message: "Valid non-negative energy_used_kwh is required"
@@ -923,7 +1209,7 @@ app.post("/api/sessions/:id/complete", async (req, res) => {
 
   try {
     const sessionCheck = await db.query(
-      `SELECT cs.*, b.charger_id FROM charging_sessions cs
+      `SELECT cs.*, b.charger_id, b.user_id FROM charging_sessions cs
        LEFT JOIN bookings b ON cs.booking_id = b.id
        WHERE cs.id = $1`,
       [id]
@@ -937,6 +1223,17 @@ app.post("/api/sessions/:id/complete", async (req, res) => {
     }
 
     const session = sessionCheck.rows[0];
+
+    // Ownership check for regular users: cannot complete another user's session
+    if (req.user.role === "user") {
+      if (!session.user_id || session.user_id !== req.user.userId) {
+        return res.status(403).json({
+          success: false,
+          message: "Forbidden: you can only complete your own charging sessions"
+        });
+      }
+    }
+
     const RATE_PER_KWH = 12;
     const calculatedAmount = Number((energy * RATE_PER_KWH).toFixed(2));
     const endTime = new Date().toISOString();
@@ -968,8 +1265,8 @@ app.post("/api/sessions/:id/complete", async (req, res) => {
   }
 });
 
-// 4. PUT /api/sessions/:id - Update an existing charging session by ID
-app.put("/api/sessions/:id", async (req, res) => {
+// 4. PUT /api/sessions/:id - Update an existing charging session by ID (Restricted: operator, admin)
+app.put("/api/sessions/:id", requireAuth, requireRole("operator", "admin"), async (req, res) => {
   const { id } = req.params;
   const { booking_id, start_time, end_time, energy_used_kwh = 0 } = req.body;
 
@@ -1007,8 +1304,8 @@ app.put("/api/sessions/:id", async (req, res) => {
   }
 });
 
-// 5. DELETE /api/sessions/:id - Delete a charging session by ID
-app.delete("/api/sessions/:id", async (req, res) => {
+// 5. DELETE /api/sessions/:id - Delete a charging session by ID (Restricted: operator, admin)
+app.delete("/api/sessions/:id", requireAuth, requireRole("operator", "admin"), async (req, res) => {
   const { id } = req.params;
   try {
     const result = await db.query(
@@ -1105,4 +1402,15 @@ app.use((error, req, res, next) => {
 return app;
 }
 
-module.exports = { createApp };
+module.exports = {
+  createApp,
+  hashPassword,
+  verifyPassword,
+  BCRYPT_SALT_ROUNDS,
+  signToken,
+  verifyToken,
+  generateTotpSecret,
+  generateTotpCode,
+  verifyTotpCode,
+  generateOtpAuthUrl
+};

@@ -1,0 +1,64 @@
+﻿
+> backend@1.0.0 test
+> node --test test/*.test.js
+
+Γ£ö construction, root, liveness and instance identification do not query database (90.9589ms)
+Γ£ö instance identifiers are opaque, stable per app and distinct between apps (32.9046ms)
+Γ£ö existing response shape: /api/stations (14.1814ms)
+Γ£ö existing response shape: /api/stations/1 (14.6624ms)
+Γ£ö existing response shape: /api/chargers (11.8677ms)
+Γ£ö existing response shape: /api/chargers?station_id=1 (9.7247ms)
+Γ£ö existing response shape: /api/chargers/7 (6.8031ms)
+Γ£ö stations detail missing returns 404 (9.4894ms)
+Γ£ö chargers detail missing returns 404 (9.6618ms)
+Γ£ö nearby stations retain distance calculation and order (9.3341ms)
+Γ£ö nearby coordinates validation makes no database calls (10.4329ms)
+Γ£ö booking validation: missing fields (68.4023ms)
+Γ£ö booking validation: invalid date (8.622ms)
+Γ£ö booking validation: reversed times (7.567ms)
+Γ£ö booking creation rejects missing charger (8.6376ms)
+Γ£ö booking overlap rejects conflict without insert (5.6883ms)
+Γ£ö booking creation preserves fields and default status (6.1211ms)
+Γ£ö /api/sessions validates booking and rejects duplicate active session (10.4698ms)
+Γ£ö /api/sessions starts session and marks charger charging (6.4191ms)
+Γ£ö /api/sessions/start validates booking and rejects duplicate active session (11.4467ms)
+Γ£ö /api/sessions/start starts session and marks charger charging (6.8853ms)
+Γ£ö session creation retains 12 INR/kWh billing (7.937ms)
+Γ£ö session completion bills at 12 INR/kWh and releases charger (11.447ms)
+Γ£ö session completion validates energy before querying (12.1752ms)
+Γ£ö session completion missing session returns 404 (9.5836ms)
+Γ£ö database errors are sanitized in response and logs (7.5034ms)
+Γ£ö malformed JSON returns a sanitized 400 (12.0061ms)
+Γ£ö frontend API routing: Compose uses the browser origin (3.9973ms)
+Γ£ö frontend API routing: Compose stays same-origin on a remote Docker host (0.9616ms)
+Γ£ö frontend API routing: local development fallback is unchanged (0.7432ms)
+Γ£ö frontend API routing: empty deployed configuration retains the Render fallback (3.0041ms)
+Γ£ö frontend API routing: unset deployed configuration retains the Render fallback (1.8139ms)
+Γ£ö frontend API routing: explicit deployed API override is preserved (1.4806ms)
+Γ£ö entry-point imports never load database or start telemetry (389.7939ms)
+Γ£ö API listens without startup queries and closes database once (72.6781ms)
+Γ£ö HTTP shutdown drains an active request before ending pool (3026.5252ms)
+Γ£ö telemetry retains toggling, counts, utilization and metric inserts (3.4125ms)
+Γ£ö telemetry coalesces overlapping cycles and waits on stop (5.4244ms)
+Γ£ö telemetry schedules only after completion and cancels its timer (2.3411ms)
+Γ£ö stopping during an active scheduled cycle prevents rescheduling (1.6278ms)
+Γ£ö restarting during a draining cycle does not create two scheduler loops (1.5582ms)
+Γ£ö a failed telemetry cycle logs no private detail and permits the next cycle (0.8397ms)
+Γ£ö worker refuses disabled startup before any database activity (0.899ms)
+Γ£ö enabled worker starts explicitly and drains before closing its pool (2.09ms)
+Γ£ö SIGTERM/SIGINT share one draining shutdown and remove listeners (0.751ms)
+Γ£ö shutdown has a bounded force-close deadline (17.2035ms)
+Γ£ö pool defaults are bounded and enforce certificate verification after pg parsing (1.8247ms)
+Γ£ö pool overrides are explicit and TLS disabling is restricted to loopback (0.9903ms)
+Γ£ö pool rejects duplicate host parameters before TLS validation (0.3238ms)
+Γ£ö pool checks a single effective host when TLS is explicitly disabled (0.4575ms)
+Γ£ö pool URL timeout parameters cannot override validated defaults or overrides (0.4628ms)
+Γ£ö pool preserves normal host and unrelated URL options with verified TLS (0.2884ms)
+Γä╣ tests 52
+Γä╣ suites 0
+Γä╣ pass 52
+Γä╣ fail 0
+Γä╣ cancelled 0
+Γä╣ skipped 0
+Γä╣ todo 0
+Γä╣ duration_ms 6700.6286

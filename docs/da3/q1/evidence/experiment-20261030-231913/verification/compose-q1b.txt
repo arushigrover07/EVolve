@@ -1,0 +1,1 @@
+﻿PASS: three Compose models, proxy membership/settings and retry policy validated offline; no environment files resolved.

@@ -8,6 +8,7 @@ x-api: &api
   environment:
     PORT: "5000"
     PG_POOL_MAX: "5"
+    PG_CONNECT_TIMEOUT_MS: "15000"
     TELEMETRY_ENABLED: "false"
   healthcheck:
     # Process liveness only; this does not query the database.
