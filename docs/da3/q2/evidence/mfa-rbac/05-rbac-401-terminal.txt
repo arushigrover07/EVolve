@@ -1,0 +1,28 @@
+=== HTTP 401 Unauthorized Live Demonstration Evidence ===
+Target Endpoint: https://evolve-qvy1.onrender.com/api/stations/999999
+HTTP Method: PUT
+Authorization Header: None (omitted)
+Payload: {"name":"Probe Test Station","location":"Test Location"}
+Timestamp: Sun, 01 Nov 2026 09:56:58 GMT
+
+=== Command Executed ===
+curl.exe --% -i -s -X PUT https://evolve-qvy1.onrender.com/api/stations/999999 -H "Content-Type: application/json" -d "{\"name\":\"Probe Test Station\",\"location\":\"Test Location\"}"
+
+=== Live Response Headers and Body ===
+HTTP/1.1 401 Unauthorized
+Date: Sun, 01 Nov 2026 09:56:58 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+access-control-allow-origin: *
+cf-cache-status: DYNAMIC
+etag: W/"58-x5RpSpPRcBcaEbGGdwyt+EQYWhU"
+rndr-id: f0aa310a-6b92-47d7
+Server: cloudflare
+vary: Accept-Encoding
+x-instance-id: e8279994-652b-4604-a901-568e71e853f6
+x-render-origin-server: Render
+CF-RAY: a53a0859f912195f-MAA
+alt-svc: h3=":443"; ma=86400
+
+{"success":false,"message":"Authentication required: missing or malformed Bearer token"}

@@ -1,0 +1,31 @@
+=== HTTP 401 Unauthorized DELETE Demonstration Evidence (Isolated Local Server) ===
+Target Endpoint: http://127.0.0.1:5000/api/stations/1
+HTTP Method: DELETE
+Authorization Header: None (omitted)
+Environment: Strictly isolated local demonstration server (100% in-memory mock database)
+Timestamp: Sun, 01 Nov 2026 10:35:35 GMT
+
+=== Terminal Command Executed ===
+curl.exe -i -s -X DELETE http://127.0.0.1:5000/api/stations/1
+
+=== Local Server Response Headers and Body ===
+HTTP/1.1 401 Unauthorized
+X-Instance-Id: local-demo-ui-server
+Access-Control-Allow-Origin: *
+Content-Type: application/json; charset=utf-8
+Content-Length: 88
+ETag: W/"58-x5RpSpPRcBcaEbGGdwyt+EQYWhU"
+Date: Sun, 01 Nov 2026 10:35:35 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"success":false,"message":"Authentication required: missing or malformed Bearer token"}
+
+=== Verification: Database Record Integrity ===
+Command Executed:
+curl.exe -s http://127.0.0.1:5000/api/stations/1
+
+Result:
+{"id":1,"name":"EVolve Central Hub","location":"Vellore Campus Sector 1","status":"ACTIVE","latitude":"12.9165000","longitude":"79.1325000","total_chargers":4,"available_chargers":3,"charging_chargers":1,"created_at":"2026-11-01T09:24:52.235Z"}
+
+Conclusion: The unauthenticated DELETE request was intercepted and rejected by requireAuth with HTTP 401 before reaching any route handler or database query. Station 1 was untouched and remains intact.

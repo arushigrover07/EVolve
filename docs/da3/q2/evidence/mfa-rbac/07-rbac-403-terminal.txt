@@ -1,0 +1,21 @@
+=== HTTP 403 Forbidden Live Demonstration Evidence ===
+Target Endpoint: https://evolve-qvy1.onrender.com/api/stations/999999
+HTTP Method: PUT
+User Account: evaluator-user@evolve.com
+User Role: user
+MFA Enabled: false
+Bearer Token: Bearer eyJhbGciOiJIUzI1NiIs...[REDACTED]
+Payload: {"name":"Probe Test Station","location":"Test Location"}
+Timestamp: Sun, 01 Nov 2026 10:13:55 GMT
+
+=== Live Request Headers ===
+Host: evolve-qvy1.onrender.com
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIs...[REDACTED]
+
+=== Live Response Headers and Body ===
+HTTP/1.1 403 Forbidden
+Content-Type: application/json; charset=utf-8
+x-instance-id: e8279994-652b-4604-a901-568e71e853f6
+
+{"success":false,"message":"Forbidden: insufficient permissions. Role 'user' is not authorized for this operation. Required: [operator, admin]"}

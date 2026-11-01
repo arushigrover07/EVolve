@@ -119,20 +119,32 @@ Both test runs strictly adhered to the same parameters:
 
 ### Root cause analysis and evaluation
 
-1. **Observed Facts**:
-   - Neon PostgreSQL query execution time on the cloud server is only ~3.99 ms (`EXPLAIN ANALYZE`).
-   - Neon server `max_connections` is 901; active connections were only ~12.
-   - Network latency between the local host in India and AWS Ohio (`us-east-2`) is ~267 ms RTT; payload transfer for 1,949 stations (~536 KB JSON) takes ~3.5 to 5.2 seconds per query.
-   - In the initial experiment (`experiment-20261030-215820`), with `PG_CONNECT_TIMEOUT_MS: 5000` and `PG_POOL_MAX: 5`, queued requests under 20 concurrent VUs exceeded 5,000 ms, throwing `Error: Connection terminated due to connection timeout` logged as `[UNCLASSIFIED]` (76 failures in One, 33 in Three).
-   - Setting `PG_CONNECT_TIMEOUT_MS: "15000"` in `docker-compose.yml` allowed queued queries to wait for in-flight WAN transfers without timing out. The 1-backend baseline achieved 1,000 / 1,000 successes with **0 failures**.
-   - In the scaled 3-backend run, 7 requests failed across replicas (3 on backend1, 2 on backend2, 2 on backend3), each logging `Error fetching stations: [UNCLASSIFIED]` when transient latency spikes (p95 latency was 8,761 ms, max was 14,762 ms) caused queue acquisitions to exceed timeout limits under concurrency.
-2. **Investigation of Process Exit Code (`processExitCode: -1`)**:
+1. **Confirmed Facts (from Configuration, Telemetry, and Artifacts)**:
+   - Neon PostgreSQL query execution time on the cloud database server was ~3.99 ms (`EXPLAIN ANALYZE`).
+   - Neon database server `max_connections` is 901; active connections during runs were only ~12.
+   - Physical network latency between the local test client in India and AWS Ohio (`us-east-2`) is ~267 ms RTT; downloading the full JSON payload of 1,949 stations (~536 KB JSON) took 3.5 to 5.2 seconds per query over WAN.
+   - Database pool configuration in `docker-compose.yml`: `PG_POOL_MAX: "5"`, `PG_CONNECT_TIMEOUT_MS: "15000"`.
+   - In `backend/dbConfig.js`, `query_timeout` and `statement_timeout` default to 10,000 ms when unset.
+   - In `frontend/nginx.compose.conf`, the baseline proxy configuration had no retry directives (`proxy_next_upstream` was unconfigured in Q1(b)), meaning any upstream error (HTTP 500) was passed directly to the client.
+   - Load test metrics: The 1-backend baseline achieved 1,000 / 1,000 successful responses (0 failures). In the 3-backend run, k6 recorded 993 successes and 7 HTTP 500 errors (0.7% failure rate), with max response time spiking to 14,762.9 ms and p95 reaching 8,761.1 ms.
+   - The backend logged sanitized `Error fetching stations: [UNCLASSIFIED]` for these 500 responses.
+
+2. **Inferred Causes & Analysis**:
+   - The failures were not caused by database CPU saturation or local Node.js process crashes.
+   - Under 20 concurrent VUs distributed across 3 backend replicas (each with a 5-connection pool), queuing and WAN network jitter caused response times to spike significantly (up to ~14.8 seconds).
+   - Because errors were sanitized as `[UNCLASSIFIED]` in application logs, we cannot definitively attribute all seven failures to a single specific mechanism. The evidence strongly suggests a combination of:
+     (a) Database connection pool acquisition waits exceeding the connection timeout,
+     (b) Queries exceeding the 10,000 ms node-postgres `query_timeout` during extreme WAN transfer spikes, or
+     (c) Transient socket resets across the transoceanic link under concurrent load.
+   - The fact that the 1-backend run had 0 failures while the 3-backend run had 7 failures reflects transient WAN jitter and concurrent connection pool contention across 3 independent Node.js processes querying the same remote cloud database.
+   - In Q1(c), configuring Nginx upstream retries (`proxy_next_upstream error timeout http_500 ...`) successfully mitigated 100% of such transient upstream errors, proving that a retry layer effectively absorbs these transient failures.
+
+3. **Investigation of Process Exit Code (`processExitCode: -1`)**:
    - In `Three.meta.json`, `processExitCode` is recorded as `-1`.
    - Programmatic provenance: When k6 fails any configured threshold (`http_req_failed: rate==0` or `checks: rate==1`), native `k6.exe` emits threshold failure diagnostics to stderr and exits with code **99** (as corroborated in the initial historical run `experiment-20261030-215820/paired/Three.meta.json` where `processExitCode: 99` was logged).
    - In `scripts/benchmark-q1b.ps1`, the execution pipeline `& $tool.Source run ... 2>&1 | Tee-Object -FilePath $consoleFile` was wrapped in a `try/catch` with `$ErrorActionPreference = 'Stop'`. In Windows PowerShell 5.1, merging native stderr (`2>&1`) through a pipeline converts stderr output into a terminating `ErrorRecord`, immediately jumping to the catch block `catch { $metadata.processExitCode = -1 }`.
    - Therefore, `-1` was PowerShell's fallback assignment when the pipeline trapped k6's threshold-failure output, while the actual native k6 process exit code on threshold breach was **99**.
-3. **Inferred Conclusion**:
-   - The bottleneck is not Neon database compute capacity or local Node.js CPU saturation. It is physical WAN transit latency to Ohio combined with concurrency queuing against a 5-connection pool limit per replica.
+
 4. **Acceptance Evaluation**:
    - The One run was formally accepted (`status: "accepted"`, exit code 0).
    - The Three run demonstrated measurable improvements (+14.76% throughput, 13.31% latency reduction), but is **formally rejected** (`status: "rejected"`) by `result-validation.cjs` because its 7 failed requests breached the zero-failure threshold (`rate==0`). The seven failures are preserved and transparently documented.
