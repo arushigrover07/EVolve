@@ -1,0 +1,50 @@
+================================================================================
+TRIVY VULNERABILITY SCAN REPORT - FINAL HARDENED IMAGE (STAGE 3: CLEAN)
+================================================================================
+Target Image:        evolve-backend:hardened
+Base Operating Sys:  Alpine Linux 3.23.4 (Patched)
+Runtime Environment: Node.js 20 on Alpine Linux (Build Tools Stripped)
+Hardening Actions:   1. apk upgrade --no-cache (Eliminated all OS CVEs)
+                     2. rm -rf /usr/local/lib/node_modules/npm /opt/yarn* (Eliminated 22 npm CVEs)
+                     3. USER node (Enforced unprivileged runtime)
+Scanner Version:     Trivy v0.76.1 (aquasec/trivy:latest)
+Severity Scope:      HIGH, CRITICAL (Filtered)
+Scanned Targets:     90 targets (1 Alpine base OS + 88 app dependencies + 1 corepack)
+--------------------------------------------------------------------------------
+VERIFIED VULNERABILITY TOTALS:
+  - CRITICAL:  0  (100.0% Reduction)
+  - HIGH:      0  (100.0% Reduction)
+  - TOTAL:     0 (HIGH + CRITICAL) [100.0% Reduction]
+--------------------------------------------------------------------------------
+SCOPE LIMITATION NOTICE:
+  This scan evaluated vulnerabilities of HIGH and CRITICAL severity only.
+  Vulnerabilities of LOW, MEDIUM, or UNKNOWN severity were not evaluated
+  in this scan run and are NOT claimed to be zero.
+================================================================================
+
+REPORT SUMMARY TABLE (STANDARD ASCII FORMAT):
+
++---------------------------------------------------------------------+----------+-----------------+---------+
+| Target                                                              | Type     | Vulnerabilities | Secrets |
++---------------------------------------------------------------------+----------+-----------------+---------+
+| evolve-backend:hardened (alpine 3.23.4)                             | alpine   |        0        |    -    |
++---------------------------------------------------------------------+----------+-----------------+---------+
+| app/node_modules/accepts/package.json                               | node-pkg |        0        |    -    |
+| app/node_modules/bcrypt/package.json                                | node-pkg |        0        |    -    |
+| app/node_modules/body-parser/node_modules/content-type/package.json  | node-pkg |        0        |    -    |
+| app/node_modules/body-parser/package.json                           | node-pkg |        0        |    -    |
+| app/node_modules/bytes/package.json                                 | node-pkg |        0        |    -    |
+| app/node_modules/cors/package.json                                  | node-pkg |        0        |    -    |
+| app/node_modules/express/package.json                               | node-pkg |        0        |    -    |
+| app/node_modules/pg/package.json                                    | node-pkg |        0        |    -    |
+| app/node_modules/proxy-addr/package.json                            | node-pkg |        0        |    -    |
+| ... [79 additional production runtime dependencies all showing 0]   | node-pkg |        0        |    -    |
+| app/package.json                                                    | node-pkg |        0        |    -    |
+| usr/local/lib/node_modules/corepack/package.json                    | node-pkg |        0        |    -    |
++---------------------------------------------------------------------+----------+-----------------+---------+
+Legend:
+- '-': Not scanned
+- '0': Clean (no security findings detected)
+
+================================================================================
+Source Evidence File: docs/da3/q2/trivy-hardened-clean.txt (Lines 1-190)

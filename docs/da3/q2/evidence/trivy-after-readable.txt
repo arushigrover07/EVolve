@@ -1,0 +1,53 @@
+================================================================================
+TRIVY VULNERABILITY SCAN REPORT - INTERMEDIATE HARDENED IMAGE (STAGE 2: AFTER)
+================================================================================
+Target Image:        evolve-backend:hardened
+Base Operating Sys:  Alpine Linux 3.23.4 (Patched via apk upgrade)
+Runtime Environment: Node.js 20 on Alpine Linux
+Scan Timestamp:      2026-10-30T20:21:39Z
+Scanner Version:     Trivy v0.76.1 (aquasec/trivy:latest)
+Severity Scope:      HIGH, CRITICAL (Filtered)
+Scanned Targets:     388 targets (1 Alpine OS base + 387 Node.js package files)
+--------------------------------------------------------------------------------
+VERIFIED VULNERABILITY TOTALS:
+  - CRITICAL:  1  (-1 reduction from Initial)
+  - HIGH:     21  (-5 reduction from Initial)
+  - TOTAL:    22 (HIGH + CRITICAL) [-6 reduction from Initial]
+--------------------------------------------------------------------------------
+INTERMEDIATE HARDENING PROGRESS & ANALYSIS:
+  1. Alpine Linux OS packages (evolve-backend:hardened):
+     Total: 0 (HIGH: 0, CRITICAL: 0)  <-- ALL 4 OS-LEVEL CVEs ELIMINATED
+  2. Application Dependencies (app/node_modules/):
+     Total: 0 (HIGH: 0, CRITICAL: 0)  <-- All application dependencies CLEAN
+  3. Remaining Vulnerabilities (usr/local/lib/node_modules/npm/):
+     Total: 22 (HIGH: 21, CRITICAL: 1) <-- All 22 reside inside unpruned npm tools
+================================================================================
+
+REMAINING FINDINGS (ISOLATED TO BUNDLED NPM BUILD TOOLS):
+
+Package (Source)                 | Vulnerability  | Severity | Installed | Fixed Version     | Title
+---------------------------------+----------------+----------+-----------+-------------------+---------------------------------------------------
+brace-expansion (npm internals)  | CVE-2026-102276| HIGH     | 2.0.1     | 5.0.10, 3.0.7...  | brace-expansion: DoS via stack exhaustion from crafted pattern
+brace-expansion (npm internals)  | CVE-2026-102278| HIGH     | 2.0.1     | 5.0.11, 3.0.8...  | brace-expansion: DoS via uncontrolled recursion in nested braces
+brace-expansion (npm internals)  | CVE-2026-13149 | HIGH     | 2.0.1     | 5.0.7, 1.1.16...  | brace-expansion: DoS due to exponential-time complexity
+brace-expansion (npm internals)  | CVE-2026-14257 | HIGH     | 2.0.1     | 5.0.8, 3.0.3...   | brace-expansion: DoS via memory exhaustion in expand()
+brace-expansion (npm internals)  | CVE-2026-69152 | HIGH     | 2.0.1     | 1.1.18, 2.1.4...  | brace-expansion: DoS via unbounded intermediate arrays
+cross-spawn (npm internals)      | CVE-2024-21538 | HIGH     | 7.0.3     | 7.0.5, 6.0.6      | cross-spawn: Regular expression denial of service (ReDoS)
+glob (npm internals)             | CVE-2025-64756 | HIGH     | 10.4.2    | 11.1.0, 10.5.0    | glob: Command Injection via Malicious Filenames
+ip-address (npm internals)       | CVE-2026-69192 | HIGH     | 9.0.5     | 10.3.1            | ip-address: Inconsistent parsing leads to SSRF
+minimatch (npm internals)        | CVE-2026-26996 | HIGH     | 2.0.1     | 10.2.1, 9.0.6...  | minimatch: DoS via specially crafted glob patterns
+minimatch (npm internals)        | CVE-2026-27903 | HIGH     | 2.0.1     | 10.2.3, 9.0.7...  | minimatch: DoS due to unbounded recursive backtracking
+minimatch (npm internals)        | CVE-2026-27904 | HIGH     | 2.0.1     | 10.2.3, 9.0.7...  | minimatch: DoS via catastrophic backtracking in glob
+pacote (npm internals)           | CVE-2026-9496  | HIGH     | 18.0.6    | 21.5.1            | pacote: DoS via crafted spec.rawSpec in addGitSha function
+sigstore (npm internals)         | CVE-2026-48815 | HIGH     | 2.3.1     | 4.1.1             | sigstore: Unauthorized certificates accepted
+tar (npm internals)              | CVE-2026-59873 | CRITICAL | 6.2.1     | 7.5.19            | node-tar: Denial of Service via crafted gzip bomb
+tar (npm internals)              | CVE-2026-23745 | HIGH     | 6.2.1     | 7.5.3             | node-tar: Arbitrary file overwrite and symlink poisoning
+tar (npm internals)              | CVE-2026-23950 | HIGH     | 6.2.1     | 7.5.4             | node-tar: Arbitrary file overwrite via Unicode collision
+tar (npm internals)              | CVE-2026-24842 | HIGH     | 6.2.1     | 7.5.7             | node-tar: Arbitrary file creation via hardlink traversal
+tar (npm internals)              | CVE-2026-26960 | HIGH     | 6.2.1     | 7.5.8             | node-tar: Arbitrary file read/write via hardlink creation
+tar (npm internals)              | CVE-2026-29786 | HIGH     | 6.2.1     | 7.5.10            | node-tar: Hardlink path traversal via drive-relative link
+tar (npm internals)              | CVE-2026-31802 | HIGH     | 6.2.1     | 7.5.11            | node-tar: File overwrite via drive-relative symlink
+tar (npm internals)              | CVE-2026-59874 | HIGH     | 6.2.1     | 7.5.18            | node-tar: DoS via malformed tar archive header
+tar (npm internals)              | CVE-2026-73566 | HIGH     | 6.2.1     | 7.5.21            | node-tar: DoS via crafted long-path tar archive
+================================================================================
+Source Evidence File: docs/da3/q2/trivy-after.txt (Lines 641-733)

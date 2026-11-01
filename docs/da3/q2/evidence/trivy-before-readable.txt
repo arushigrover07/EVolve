@@ -1,0 +1,68 @@
+================================================================================
+TRIVY VULNERABILITY SCAN REPORT - INITIAL UNHARDENED IMAGE (STAGE 1: BEFORE)
+================================================================================
+Target Image:        evolve-backend:latest
+Base Operating Sys:  Alpine Linux 3.23.4
+Runtime Environment: Node.js 20 on Alpine Linux
+Scan Timestamp:      2026-10-30T20:07:06Z
+Scanner Version:     Trivy v0.76.1 (aquasec/trivy:latest)
+Severity Scope:      HIGH, CRITICAL (Filtered)
+Scanned Targets:     402 targets (1 Alpine OS base + 401 Node.js package files)
+--------------------------------------------------------------------------------
+VERIFIED VULNERABILITY TOTALS:
+  - CRITICAL:  2
+  - HIGH:     26
+  - TOTAL:    28 (HIGH + CRITICAL)
+--------------------------------------------------------------------------------
+BREAKDOWN BY TARGET CATEGORY:
+  1. Alpine Linux OS packages (evolve-backend:latest):
+     Total: 4 (HIGH: 4, CRITICAL: 0)
+  2. Node.js Application & Bundled Dependencies (node-pkg):
+     Total: 24 (HIGH: 22, CRITICAL: 2)
+================================================================================
+
+DETAILED FINDINGS INVENTORY:
+
+--------------------------------------------------------------------------------
+Target 1: evolve-backend:latest (alpine 3.23.4) - Operating System Packages
+Summary: Total 4 (HIGH: 4, CRITICAL: 0)
+--------------------------------------------------------------------------------
+Library     | Vulnerability  | Severity | Status | Installed | Fixed    | Title
+------------+----------------+----------+--------+-----------+----------+---------------------------------------------------
+libcrypto3  | CVE-2026-14456 | HIGH     | fixed  | 3.5.6-r0  | 3.5.8-r0 | openssl: DoS via unbounded memory growth in QUIC
+libcrypto3  | CVE-2026-45447 | HIGH     | fixed  | 3.5.6-r0  | 3.5.7-r0 | openssl: Heap Use-After-Free in PKCS7_verify()
+libssl3     | CVE-2026-14456 | HIGH     | fixed  | 3.5.6-r0  | 3.5.8-r0 | openssl: DoS via unbounded memory growth in QUIC
+libssl3     | CVE-2026-45447 | HIGH     | fixed  | 3.5.6-r0  | 3.5.7-r0 | openssl: Heap Use-After-Free in PKCS7_verify()
+
+--------------------------------------------------------------------------------
+Target 2: Node.js Dependencies (node-pkg) - Application & Tooling Packages
+Summary: Total 24 (HIGH: 22, CRITICAL: 2)
+--------------------------------------------------------------------------------
+Package (Source)                 | Vulnerability  | Severity | Installed | Fixed Version     | Title
+---------------------------------+----------------+----------+-----------+-------------------+---------------------------------------------------
+body-parser (package.json)       | CVE-2026-111181| HIGH     | 2.3.0     | 2.4.0, 1.20.9     | body-parser: DoS via unhandled decompression stream error
+brace-expansion (package.json)   | CVE-2026-102276| HIGH     | 2.0.1     | 5.0.10, 3.0.7...  | brace-expansion: DoS via stack exhaustion from crafted pattern
+brace-expansion (package.json)   | CVE-2026-102278| HIGH     | 2.0.1     | 5.0.11, 3.0.8...  | brace-expansion: DoS via uncontrolled recursion in nested braces
+brace-expansion (package.json)   | CVE-2026-13149 | HIGH     | 2.0.1     | 5.0.7, 1.1.16...  | brace-expansion: DoS due to exponential-time complexity
+brace-expansion (package.json)   | CVE-2026-14257 | HIGH     | 2.0.1     | 5.0.8, 3.0.3...   | brace-expansion: DoS via memory exhaustion in expand()
+brace-expansion (package.json)   | CVE-2026-69152 | HIGH     | 2.0.1     | 1.1.18, 2.1.4...  | brace-expansion: DoS via unbounded intermediate arrays
+cross-spawn (package.json)       | CVE-2024-21538 | HIGH     | 7.0.3     | 7.0.5, 6.0.6      | cross-spawn: Regular expression denial of service (ReDoS)
+glob (package.json)              | CVE-2025-64756 | HIGH     | 10.4.2    | 11.1.0, 10.5.0    | glob: Command Injection via Malicious Filenames
+ip-address (package.json)        | CVE-2026-69192 | HIGH     | 9.0.5     | 10.3.1            | ip-address: Inconsistent parsing leads to SSRF
+minimatch (package.json)         | CVE-2026-26996 | HIGH     | 2.0.1     | 10.2.1, 9.0.6...  | minimatch: DoS via specially crafted glob patterns
+minimatch (package.json)         | CVE-2026-27903 | HIGH     | 2.0.1     | 10.2.3, 9.0.7...  | minimatch: DoS due to unbounded recursive backtracking
+minimatch (package.json)         | CVE-2026-27904 | HIGH     | 2.0.1     | 10.2.3, 9.0.7...  | minimatch: DoS via catastrophic backtracking in glob
+pacote (package.json)            | CVE-2026-9496  | HIGH     | 18.0.6    | 21.5.1            | pacote: DoS via crafted spec.rawSpec in addGitSha function
+proxy-addr (package.json)        | CVE-2026-90711 | CRITICAL | 2.0.7     | 2.0.8             | proxy-addr: IP spoofing via IPv4-mapped IPv6 trust subnet
+sigstore (package.json)          | CVE-2026-48815 | HIGH     | 2.3.1     | 4.1.1             | sigstore: Unauthorized certificates accepted
+tar (package.json)               | CVE-2026-59873 | CRITICAL | 6.2.1     | 7.5.19            | node-tar: Denial of Service via crafted gzip bomb
+tar (package.json)               | CVE-2026-23745 | HIGH     | 6.2.1     | 7.5.3             | node-tar: Arbitrary file overwrite and symlink poisoning
+tar (package.json)               | CVE-2026-23950 | HIGH     | 6.2.1     | 7.5.4             | node-tar: Arbitrary file overwrite via Unicode collision
+tar (package.json)               | CVE-2026-24842 | HIGH     | 6.2.1     | 7.5.7             | node-tar: Arbitrary file creation via hardlink traversal
+tar (package.json)               | CVE-2026-26960 | HIGH     | 6.2.1     | 7.5.8             | node-tar: Arbitrary file read/write via hardlink creation
+tar (package.json)               | CVE-2026-29786 | HIGH     | 6.2.1     | 7.5.10            | node-tar: Hardlink path traversal via drive-relative link
+tar (package.json)               | CVE-2026-31802 | HIGH     | 6.2.1     | 7.5.11            | node-tar: File overwrite via drive-relative symlink
+tar (package.json)               | CVE-2026-59874 | HIGH     | 6.2.1     | 7.5.18            | node-tar: DoS via malformed tar archive header
+tar (package.json)               | CVE-2026-73566 | HIGH     | 6.2.1     | 7.5.21            | node-tar: DoS via crafted long-path tar archive
+================================================================================
+Source Evidence File: docs/da3/q2/trivy-before.txt (Lines 636-758)
